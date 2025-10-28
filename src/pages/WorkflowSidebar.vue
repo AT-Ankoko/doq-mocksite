@@ -1,16 +1,9 @@
 <template>
   <v-col class="workflow-sidebar | bg-white | border-e | overflow-y-auto | pa-0">
-    <!-- <v-row class="px-6 py-4 | border-b | ma-0">
+    <v-row 
+      class="px-6 py-4 | border-b | ma-0"
+    >
       <v-col cols="12" class="pa-0">
-        <h2 class="text-h6 | font-weight-bold | text-grey-darken-4">워크플로우</h2>
-        <p class="text-caption | text-grey-darken-1 | mt-1">대화 흐름도</p>
-      </v-col>
-    </v-row> -->
-
-    <!-- 시나리오 선택 영역 -->
-    <v-row class="px-6 py-4 | border-b | bg-grey-lighten-4 | ma-0">
-      <v-col cols="12" class="pa-0">
-        <!-- Select Box -->
         <v-select
           :model-value="currentScenario"
           @update:model-value="$emit('select-scenario', $event)"
@@ -19,20 +12,26 @@
           item-value="value"
           variant="outlined"
           density="comfortable"
-          color="primary"
+          color="#5661F6"
           hide-details
         ></v-select>
 
-        <!-- 선택된 시나리오 정보 카드 -->
         <v-card
           class="mt-3"
-          variant="flat"
-          color="blue-lighten-5"
-          border="md primary"
+          variant="outlined"
+          border="md"
+          :style="{
+            'background-color': '#858BFF1A',
+            'border-color': '#858BFF'
+          }"
         >
           <v-card-text class="pa-4">
             <v-row class="ma-0">
-              <v-col cols="12" class="pa-0 | text-body-2 | font-weight-bold | text-blue-darken-4">
+              <v-col 
+                cols="12" 
+                class="pa-0 | text-body-2 | font-weight-bold"
+                style="color: #858BFF;"
+              >
                 {{ currentScenarioInfo.title }}
               </v-col>
               <v-col cols="12" class="pa-0 | text-caption | text-grey-darken-2">
@@ -45,60 +44,19 @@
     </v-row>
 
 
-    <!-- 네비게이션 버튼 -->
-    <!-- <v-row class="px-6 py-4 | border-b | ma-0">
-      <v-col cols="12" class="d-flex | ga-2 | pa-0">
-        <v-btn
-          @click="$emit('restart-scenario')"
-          variant="outlined"
-          color="primary"
-          size="small"
-          block
-        >
-          <v-icon size="small" start>mdi-restart</v-icon>
-          시작으로
-        </v-btn>
-      </v-col>
-      <v-col cols="12" class="d-flex | ga-2 | pa-0 | mt-2">
-        <v-btn
-          @click="$emit('prev-step')"
-          :disabled="isFirstStep"
-          variant="tonal"
-          color="grey-darken-1"
-          size="small"
-          class="flex-grow-1"
-        >
-          <v-icon size="small">mdi-chevron-left</v-icon>
-          이전
-        </v-btn>
-        <v-btn
-          @click="$emit('next-step')"
-          :disabled="isLastStep"
-          variant="tonal"
-          color="primary"
-          size="small"
-          class="flex-grow-1"
-        >
-          다음
-          <v-icon size="small">mdi-chevron-right</v-icon>
-        </v-btn>
-      </v-col>
-    </v-row> -->
-
-    <!-- 플로우 블록 -->
     <v-row class="px-6 py-6 | ma-0">
       <v-col cols="12" class="d-flex flex-column | ga-3 | pa-0">
         <template v-for="(step, idx) in currentSteps" :key="step.id">
           <v-card
             @click="$emit('select-step', step.id)"
-            :variant="selectedStep === step.id ? 'flat' : 'outlined'"
-            :color="selectedStep === step.id ? getStepColor(step.type) : 'white'"
-            :border="selectedStep !== step.id ? `md ${getStepBorderColor(step.type)}` : undefined"
-            :class="[
-              'pa-4 | cursor-pointer',
-              { 'step-selected': selectedStep === step.id }
-            ]"
-            hover
+            variant="outlined"
+            border="md"
+            :style="{ 
+              'border-color': getStepBorderColor(step.type),
+              'background-color': selectedStep === step.id ? getStepSelectedBgColor(step.type) : 'white' 
+            }"
+            class="pa-4 | cursor-pointer"
+            ripple="false" 
           >
             <v-row class="ma-0">
               <v-col cols="12" class="d-flex align-center | ga-2 | pa-0">
@@ -106,27 +64,27 @@
                   size="24" 
                   :color="getStepAvatarColor(step.type, selectedStep === step.id)"
                 >
-                  <span class="text-caption | font-weight-bold | white--text">{{ idx + 1 }}</span>
+                  <span 
+                    class="text-caption | font-weight-bold"
+                    :style="{ color: selectedStep === step.id ? 'white' : getStepTextColor(step.type) }"
+                  >{{ idx + 1 }}</span>
                 </v-avatar>
                 <span 
                   class="text-body-2 | font-weight-bold"
-                  :class="selectedStep === step.id ? 'white--text' : getStepTextColor(step.type)"
+                  :style="{ color: getStepTextColor(step.type) }"
                 >
                   {{ step.label }}
                 </span>
               </v-col>
               <v-col 
                 cols="12" 
-                class="text-caption | ml-8 | pa-0"
-                :class="selectedStep === step.id ? 'white--text' : 'text-grey-darken-1'"
-                :style="selectedStep === step.id ? 'opacity: 0.9;' : ''"
+                class="text-caption | ml-8 | pa-0 | text-grey-darken-1"
               >
                 {{ step.subtitle }}
               </v-col>
             </v-row>
           </v-card>
           
-          <!-- 연결선 -->
           <v-row v-if="idx < currentSteps.length - 1" class="ma-0">
             <v-col cols="12" class="d-flex justify-center | pa-0">
               <v-divider 
@@ -144,7 +102,12 @@
 </template>
 
 <script setup>
+// <script setup> 부분은 변경할 필요가 없습니다. (그대로 사용)
 import { computed } from "vue";
+
+// ----- 색상 변수 정의 -----
+const COLOR_BLUE = '#5661F6';
+const COLOR_ORANGE = '#FF8513';
 
 const props = defineProps({
   scenarios: {
@@ -181,40 +144,40 @@ const currentSteps = computed(() => {
   return props.scenarios[props.currentScenario]?.steps || [];
 });
 
-// 단계 타입에 따른 색상 반환 (선택 시)
-function getStepColor(type) {
+function getStepSelectedBgColor(type) {
   if (type === 'user') {
-    return 'orange';
+    return '#FF851333'; // 주황색 20%
   }
-  return 'blue'; // AI 타입
+  return '#5661F633'; // 파란색 20%
 }
 
-// 단계 타입에 따른 테두리 색상 반환 (미선택 시)
+// 단계 타입에 따른 테두리 색상 반환
 function getStepBorderColor(type) {
   if (type === 'user') {
-    return 'orange';
+    return COLOR_ORANGE;
   }
-  return 'blue'; // AI 타입
+  return COLOR_BLUE;
 }
 
-// 단계 타입에 따른 텍스트 색상 반환 (미선택 시)
+// 단계 타입에 따른 텍스트 색상 반환
 function getStepTextColor(type) {
   if (type === 'user') {
-    return 'text-orange-darken-2';
+    return COLOR_ORANGE;
   }
-  return 'text-blue-darken-2'; // AI 타입
+  return COLOR_BLUE;
 }
 
-// 아바타 색상 반환
+// 30% 투명도 hex (아바타 미선택 시)
 function getStepAvatarColor(type, isSelected) {
   if (isSelected) {
-    return type === 'user' ? 'orange-darken-2' : 'blue-darken-2';
+    return type === 'user' ? COLOR_ORANGE : COLOR_BLUE;
   }
-  return type === 'user' ? 'orange-lighten-4' : 'blue-lighten-4';
+  return type === 'user' ? '#FF85134D' : '#5661F64D';
 }
 </script>
 
 <style scoped>
+/* <style> 부분은 변경할 필요가 없습니다. (그대로 사용) */
 .workflow-sidebar {
   width: 320px;
   min-width: 320px;
@@ -235,16 +198,6 @@ function getStepAvatarColor(type, isSelected) {
 
 .border-b {
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-
-/* 선택된 카드의 텍스트 색상 */
-:deep(.v-card.bg-orange .v-card-text),
-:deep(.v-card.bg-blue .v-card-text) {
-  color: white !important;
-}
-
-:deep(.white--text) {
-  color: white !important;
 }
 
 /* Select Box 스타일 */
