@@ -1,7 +1,6 @@
 <template>
-  <v-container fluid class="pa-0 fill-height">
-    <v-row class="no-gutters fill-height">
-      <!-- 워크플로우 사이드바 -->
+  <v-container fluid :class="['pa-0', 'fill-height']">
+    <v-row :class="['no-gutters', 'fill-height']">
       <WorkflowSidebar
         :scenarios="scenarios"
         :current-scenario="currentScenario"
@@ -10,7 +9,6 @@
         @select-step="handleStepClick"
       />
 
-      <!-- 채팅 영역 -->
       <ChatArea
         ref="chatAreaRef"
         :messages="messages"
@@ -22,7 +20,6 @@
       />
 
 
-      <!-- 계약서 미리보기 -->
       <ContractPreview
         :contract-data="contractData"
       />
