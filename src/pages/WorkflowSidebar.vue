@@ -44,6 +44,47 @@
       </v-col>
     </v-row>
 
+
+    <!-- 네비게이션 버튼 -->
+    <!-- <v-row class="px-6 py-4 | border-b | ma-0">
+      <v-col cols="12" class="d-flex | ga-2 | pa-0">
+        <v-btn
+          @click="$emit('restart-scenario')"
+          variant="outlined"
+          color="primary"
+          size="small"
+          block
+        >
+          <v-icon size="small" start>mdi-restart</v-icon>
+          시작으로
+        </v-btn>
+      </v-col>
+      <v-col cols="12" class="d-flex | ga-2 | pa-0 | mt-2">
+        <v-btn
+          @click="$emit('prev-step')"
+          :disabled="isFirstStep"
+          variant="tonal"
+          color="grey-darken-1"
+          size="small"
+          class="flex-grow-1"
+        >
+          <v-icon size="small">mdi-chevron-left</v-icon>
+          이전
+        </v-btn>
+        <v-btn
+          @click="$emit('next-step')"
+          :disabled="isLastStep"
+          variant="tonal"
+          color="primary"
+          size="small"
+          class="flex-grow-1"
+        >
+          다음
+          <v-icon size="small">mdi-chevron-right</v-icon>
+        </v-btn>
+      </v-col>
+    </v-row> -->
+
     <!-- 플로우 블록 -->
     <v-row class="px-6 py-6 | ma-0">
       <v-col cols="12" class="d-flex flex-column | ga-3 | pa-0">
