@@ -1,6 +1,7 @@
 <template>
   <v-container fluid :class="['pa-0', 'fill-height']">
     <v-row :class="['no-gutters', 'fill-height']">
+      
       <WorkflowSidebar
         :scenarios="scenarios"
         :current-scenario="currentScenario"
@@ -8,6 +9,32 @@
         @select-scenario="loadScenario"
         @select-step="handleStepClick"
       />
+
+      <v-sheet
+        width="54"
+        class="d-flex flex-column align-center ga-3 pa-2"
+        color="white"
+      >
+        <v-btn icon variant="plain" color="#51A1FF">
+          <v-icon size="32">mdi-chat-processing-outline</v-icon>
+          <v-tooltip activator="parent" location="end">새 채팅</v-tooltip>
+        </v-btn>
+        <v-btn icon variant="plain" color="#51A1FF">
+          <v-icon size="32">mdi-history</v-icon>
+          <v-tooltip activator="parent" location="end">이력</v-tooltip>
+        </v-btn>
+        
+        <v-spacer></v-spacer>
+
+        <v-btn icon variant="plain" color="#51A1FF">
+          <v-icon size="32">mdi-help-circle-outline</v-icon>
+          <v-tooltip activator="parent" location="end">도움말</v-tooltip>
+        </v-btn>
+        <v-btn icon variant="plain" color="#51A1FF">
+          <v-icon size="32">mdi-cog-outline</v-icon>
+          <v-tooltip activator="parent" location="end">설정</v-tooltip>
+        </v-btn>
+      </v-sheet>
 
       <ChatArea
         ref="chatAreaRef"
@@ -17,8 +44,9 @@
         @update:input-value="inputValue = $event"
         @send-message="handleSend"
         @select-option="handleOptionClick"
+        class="flex-grow-1"
+        style="overflow: hidden"
       />
-
 
       <ContractPreview
         :contract-data="contractData"
