@@ -9,7 +9,7 @@
           :selected-step="selectedStep"
           @select-scenario="loadScenario"
           @select-step="handleStepClick"
-          class="fill-height" />
+          />
       </v-col>
 
       <v-col cols="auto">
@@ -63,16 +63,20 @@
           @update:input-value="inputValue = $event"
           @send-message="handleSend"
           @select-option="handleOptionClick"
-          class="fill-height" style="overflow-y: auto" 
+          style="overflow-y: auto" 
         />
       </v-col>
       
-      <v-col cols="auto" class="d-flex | flex-column" style="overflow-y: hidden;">
+      <v-col 
+        cols="auto" class="d-flex | flex-column | mt-6 | mb-6 | mr-6" 
+        style="overflow-y: hidden; border-radius: 24px;"
+      >
         <ContractPreview
           :contract-data="contractData"
           class="fill-height" style="overflow-y: auto" 
         />
       </v-col>
+
     </v-row>
   </v-container>
 </template>
@@ -95,6 +99,7 @@ const selectedStep = ref(null);
 const contractData = ref({});
 const chatAreaRef = ref(null);
 
+// [수정] scenarios.steps 내부의 color 속성 모두 제거
 const scenarios = ref([
   // 시나리오 1: 명확한 자연어 제시
   {
@@ -102,12 +107,12 @@ const scenarios = ref([
     title: '명확한 자연어 제시',
     description: '사용자가 구체적인 날짜나 정보를 명확하게 제공',
     steps: [
-      { id: 1, type: 'start', label: 'AI 조항 질문', subtitle: '작업 기간은?', color: 'blue' },
-      { id: 2, type: 'user', label: 'User 명확한 응답', subtitle: '11/1 ~ 11/14', color: 'green' },
-      { id: 3, type: 'ai', label: 'AI 변환 및 확인', subtitle: '맞으신가요?', color: 'purple' },
-      { id: 4, type: 'user', label: 'User 수락', subtitle: '네, 맞아요', color: 'green' },
-      { id: 5, type: 'end', label: '조항 확정', subtitle: '완료', color: 'teal-darken-2' },
-      { id: 6, type: 'start', label: 'AI 조항 질문', subtitle: '대금은?', color: 'blue' }
+      { id: 1, type: 'start', label: 'AI 조항 질문', subtitle: '작업 기간은?' },
+      { id: 2, type: 'user', label: 'User 명확한 응답', subtitle: '11/1 ~ 11/14' },
+      { id: 3, type: 'ai', label: 'AI 변환 및 확인', subtitle: '맞으신가요?' },
+      { id: 4, type: 'user', label: 'User 수락', subtitle: '네, 맞아요' },
+      { id: 5, type: 'end', label: '조항 확정', subtitle: '완료' },
+      { id: 6, type: 'start', label: 'AI 조항 질문', subtitle: '대금은?' }
     ],
     messages: [
       { role: 'ai', content: '안녕하세요, DoQ입니다. 계약서 초안 작성을 시작하겠습니다. 먼저, 용역(작업) 기간은 언제인가요?', stepId: 1 },
@@ -125,12 +130,12 @@ const scenarios = ref([
     title: '모호한 응답',
     description: '사용자가 모호한 답변을 하여 명확화 필요',
     steps: [
-      { id: 1, type: 'start', label: 'AI 조항 질문', subtitle: '작업 기간은?', color: 'blue' },
-      { id: 2, type: 'user', label: 'User 모호한 응답', subtitle: '2주 정도...', color: 'yellow-darken-2' },
-      { id: 3, type: 'ai', label: 'AI 다지선다 제공', subtitle: '옵션 선택', color: 'purple' },
-      { id: 4, type: 'user', label: 'User 옵션 선택', subtitle: '2번 선택', color: 'green' },
-      { id: 5, type: 'end', label: '조항 확정', subtitle: '완료', color: 'teal-darken-2' },
-      { id: 6, type: 'start', label: 'AI 조항 질문', subtitle: '대금은?', color: 'blue' }
+      { id: 1, type: 'start', label: 'AI 조항 질문', subtitle: '작업 기간은?' },
+      { id: 2, type: 'user', label: 'User 모호한 응답', subtitle: '2주 정도...' },
+      { id: 3, type: 'ai', label: 'AI 다지선다 제공', subtitle: '옵션 선택' },
+      { id: 4, type: 'user', label: 'User 옵션 선택', subtitle: '2번 선택' },
+      { id: 5, type: 'end', label: '조항 확정', subtitle: '완료' },
+      { id: 6, type: 'start', label: 'AI 조항 질문', subtitle: '대금은?' }
     ],
     messages: [
       { role: 'ai', content: '안녕하세요, DoQ입니다. 계약서 초안 작성을 시작하겠습니다. 먼저, 용역(작업) 기간은 언제인가요?', stepId: 1 },
@@ -157,13 +162,13 @@ const scenarios = ref([
     title: '용어 질문',
     description: '사용자가 용어나 개념에 대해 질문',
     steps: [
-      { id: 1, type: 'start', label: 'AI 조항 질문', subtitle: '저작권은?', color: 'blue' },
-      { id: 2, type: 'user', label: 'User 용어 질문', subtitle: '그게 뭐예요?', color: 'orange' },
-      { id: 3, type: 'ai', label: 'AI 용어 설명', subtitle: '개념 안내', color: 'pink' },
-      { id: 4, type: 'ai', label: 'AI 질문 재제시', subtitle: '다시 질문', color: 'purple' },
-      { id: 5, type: 'user', label: 'User 옵션 선택', subtitle: '1번 선택', color: 'green' },
-      { id: 6, type: 'end', label: '조항 확정', subtitle: '완료', color: 'teal-darken-2' },
-      { id: 7, type: 'start', label: 'AI 조항 질문', subtitle: '다음으로...', color: 'blue' }
+      { id: 1, type: 'start', label: 'AI 조항 질문', subtitle: '저작권은?' },
+      { id: 2, type: 'user', label: 'User 용어 질문', subtitle: '그게 뭐예요?' },
+      { id: 3, type: 'ai', label: 'AI 용어 설명', subtitle: '개념 안내' },
+      { id: 4, type: 'ai', label: 'AI 질문 재제시', subtitle: '다시 질문' },
+      { id: 5, type: 'user', label: 'User 옵션 선택', subtitle: '1번 선택' },
+      { id: 6, type: 'end', label: '조항 확정', subtitle: '완료' },
+      { id: 7, type: 'start', label: 'AI 조항 질문', subtitle: '다음으로...' }
     ],
     messages: [
       { role: 'ai', content: '이어서 지식재산권(저작권) 귀속 조항을 정하겠습니다. 작업하신 산출물의 저작권은 누가 가지게 되나요?', stepId: 1 },
@@ -186,6 +191,8 @@ const scenarios = ref([
     contractUpdate: { copyright: '모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속됨' }
   }
 ]);
+
+// (이하 나머지 코드는 동일)
 
 // ----- 라이프 사이클 ----- //
 onMounted(() => {
@@ -242,7 +249,7 @@ watch(messages, () => {
   scrollToBottom();
 }, { deep: true });
 
-</script>
+</script> 
 
 <style scoped>
 /* 공통 스타일은 각 컴포넌트로 이동 */
