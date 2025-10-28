@@ -1,8 +1,8 @@
 <template>
   <v-app class="background">
-    <v-app-bar app color="#FBFBFB" flat height="100" v-if="sAppBar">
+    <!-- <v-app-bar app color="#FBFBFB" flat height="100" v-if="sAppBar">
       <v-row class="align-center | justify-space-between | padding-32 | padding-top-56 | padding-bottom-16">
-        <!-- 로고 -->
+
         <v-col cols="auto">
           <v-row class="align-center | pl-3">
             <v-img 
@@ -12,9 +12,13 @@
             ></v-img>
           </v-row>
         </v-col>
-        
+
       </v-row>
-    </v-app-bar>
+    </v-app-bar> -->
+
+    <v-main>
+      <RouterView />
+    </v-main>
   </v-app>
 
   <!-- 다이얼로그 -->
@@ -49,8 +53,10 @@
 <script setup>
 // ----- 선언부 ----- //
 import { onMounted, onUnmounted, ref, computed, watch} from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { RouterView } from "vue-router"
 
+
+const sAppBar = ref(true) // 또는 false
 
 const dialog = ref({
   title: '',
