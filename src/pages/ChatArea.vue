@@ -1,7 +1,7 @@
 <template>
-  <div class="chat-area d-flex flex-column flex-grow-1">
-    <!-- 헤더 -->
-    <div class="bg-white border-b px-6 py-4 d-flex align-center justify-space-between">
+  <v-sheet class="chat-area d-flex flex-column flex-grow-1">
+    
+    <v-sheet color="white" class="border-b px-6 py-4 d-flex align-center justify-space-between">
       <div class="d-flex align-center ga-3">
         <v-avatar color="blue-darken-2" size="40" rounded="lg">
           <v-icon color="white" size="24">mdi-file-document-outline</v-icon>
@@ -11,25 +11,32 @@
           <p class="text-caption text-grey-darken-1">용역계약서 작성 도우미</p>
         </div>
       </div>
-    </div>
+    </v-sheet>
 
-    <!-- 메시지 영역 -->
-    <div class="messages-container flex-grow-1 overflow-y-auto px-6 py-6" ref="messagesContainer">
+    <v-container fluid class="messages-container flex-grow-1 overflow-y-auto pa-6" ref="messagesContainer">
       <div class="d-flex flex-column ga-4">
+        
         <div
           v-for="(msg, idx) in messages"
           :key="idx"
           :class="['d-flex', msg.role === 'user' ? 'justify-end' : 'justify-start']"
         >
-          <div
+          <div 
             :class="[
-              'message-bubble pa-4',
-              msg.role === 'user' ? 'bg-blue-darken-2 text-white' : 'bg-white border'
+              'd-flex', 
+              'flex-column', 
+              msg.role === 'user' ? 'align-end' : 'align-start'
             ]"
           >
-            <p class="text-body-2 message-text">{{ msg.content }}</p>
+            <v-sheet
+              :color="msg.role === 'user' ? 'blue-darken-2' : 'white'"
+              :class="['message-bubble', 'pa-4', { 'border': msg.role !== 'user' }]"
+              rounded="lg"
+            >
+              <p class="text-body-2 message-text">{{ msg.content }}</p>
+            </v-sheet>
             
-            <div v-if="msg.options" class="mt-3 d-flex flex-column ga-2">
+            <div v-if="msg.options" class="mt-3 d-flex flex-column ga-2 message-addons">
               <v-btn
                 v-for="(option, optIdx) in msg.options"
                 :key="optIdx"
@@ -43,44 +50,50 @@
               </v-btn>
             </div>
             
-            <div v-if="msg.confirmed" class="mt-2 d-flex align-center ga-1 text-green-darken-2">
+            <div v-if="msg.confirmed" class="mt-2 d-flex align-center ga-1 text-green-darken-2 message-addons">
               <v-icon size="16" color="green-darken-2">mdi-check</v-icon>
               <span class="text-caption font-weight-medium">조항 확정됨</span>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </v-container>
 
-    <!-- 입력 영역 -->
-    <div class="bg-white border-t px-6 py-4">
-      <div class="d-flex ga-3 mx-auto" style="max-width: 1024px;">
+    <v-sheet color="white" class="border-t px-6 py-4">
+      <v-card 
+        max-width="1024" 
+        class="mx-auto pa-2 d-flex align-center" 
+        flat 
+        rounded="xl" 
+        color="grey-lighten-4"
+      >
         <v-text-field
           :model-value="inputValue"
           @update:model-value="$emit('update:input-value', $event)"
           @keypress.enter="$emit('send-message')"
           placeholder="메시지를 입력하세요..."
-          variant="outlined"
-          density="comfortable"
-          hide-details
+          variant="solo" 
+          flat 
+          hide-details 
+          density="comfortable" 
+          bg-color="transparent" 
           class="flex-grow-1"
         ></v-text-field>
         <v-btn
           @click="$emit('send-message')"
-          color="blue-darken-2"
-          size="large"
-          icon
-        >
-          <v-icon>mdi-send</v-icon>
-        </v-btn>
-      </div>
-    </div>
-  </div>
+          color="blue"
+          icon="mdi-send"
+          variant="plain" 
+        ></v-btn>
+      </v-card>
+    </v-sheet>
+  </v-sheet>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 
+// <script setup> 내용은 변경할 필요 없이 그대로입니다.
 const props = defineProps({
   messages: {
     type: Array,
@@ -112,8 +125,15 @@ defineExpose({
 
 .message-bubble {
   max-width: 672px;
-  border-radius: 16px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* [추가] 부가 요소(선택지, 확정)가 버블의 최대 너비를 넘지 않도록 설정 */
+.message-addons {
+  max-width: 672px;
+  /* d-flex flex-column과 함께 사용되어 
+    내부의 v-btn 등이 100% 너비를 갖도록 함 
+  */
+  width: 100%; 
 }
 
 .message-text {
@@ -124,13 +144,5 @@ defineExpose({
 
 .messages-container {
   scroll-behavior: smooth;
-}
-
-.border-t {
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.border-b {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 </style>
