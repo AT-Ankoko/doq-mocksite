@@ -1,93 +1,83 @@
 <template>
-  <v-sheet class="chat-area d-flex flex-column flex-grow-1">
-    
-    <v-sheet color="white" class="border-b px-6 py-4 d-flex align-center justify-space-between">
-      <div class="d-flex align-center ga-3">
-        <v-avatar color="blue-darken-2" size="40" rounded="lg">
-          <v-icon color="white" size="24">mdi-file-document-outline</v-icon>
-        </v-avatar>
-        <div>
-          <h1 class="text-h6 font-weight-bold text-grey-darken-4">DoQ</h1>
-          <p class="text-caption text-grey-darken-1">용역계약서 작성 도우미</p>
-        </div>
-      </div>
-    </v-sheet>
-
-    <v-container fluid class="messages-container flex-grow-1 overflow-y-auto pa-6" ref="messagesContainer">
-      <div class="d-flex flex-column ga-4">
-        
-        <div
-          v-for="(msg, idx) in messages"
-          :key="idx"
-          :class="['d-flex', msg.role === 'user' ? 'justify-end' : 'justify-start']"
+  <v-container fluid class="messages-container | flex-grow-1 | overflow-y-auto | pa-6" ref="messagesContainer">
+    <div class="d-flex | flex-column | ga-4">
+      
+      <div
+        v-for="(msg, idx) in messages"
+        :key="idx"
+        :class="['d-flex', msg.role === 'user' ? 'justify-end' : 'justify-start']"
+      >
+        <div 
+          :class="[
+            'd-flex', 
+            'flex-column', 
+            msg.role === 'user' ? 'align-end' : 'align-start'
+          ]"
         >
-          <div 
+          <v-chip
             :class="[
-              'd-flex', 
-              'flex-column', 
-              msg.role === 'user' ? 'align-end' : 'align-start'
+              'message-bubble',
+              'pa-4',
+              'message-text',
+              'text-body-2',
+              msg.role === 'user' ? 'user-bubble' : 'ai-bubble'
             ]"
+            rounded="lg"
+            label
           >
-            <v-sheet
-              :color="msg.role === 'user' ? 'blue-darken-2' : 'white'"
-              :class="['message-bubble', 'pa-4', { 'border': msg.role !== 'user' }]"
-              rounded="lg"
+            {{ msg.content }}
+          </v-chip>
+          
+          <div v-if="msg.options" class="mt-3 | d-flex | flex-column | ga-2 | message-addons">
+            <v-btn
+              v-for="(option, optIdx) in msg.options"
+              :key="optIdx"
+              @click="$emit('select-option', option)"
+              variant="outlined"
+              color="#5200FF"
+              class="text-left | justify-start | text-body-2"
+              height="auto"
             >
-              <p class="text-body-2 message-text">{{ msg.content }}</p>
-            </v-sheet>
-            
-            <div v-if="msg.options" class="mt-3 d-flex flex-column ga-2 message-addons">
-              <v-btn
-                v-for="(option, optIdx) in msg.options"
-                :key="optIdx"
-                @click="$emit('select-option', option)"
-                variant="outlined"
-                color="grey-darken-1"
-                class="text-left justify-start text-body-2"
-                height="auto"
-              >
-                {{ optIdx + 1 }}. {{ option }}
-              </v-btn>
-            </div>
-            
-            <div v-if="msg.confirmed" class="mt-2 d-flex align-center ga-1 text-green-darken-2 message-addons">
-              <v-icon size="16" color="green-darken-2">mdi-check</v-icon>
-              <span class="text-caption font-weight-medium">조항 확정됨</span>
-            </div>
+              {{ optIdx + 1 }}. {{ option }}
+            </v-btn>
+          </div>
+          
+          <div 
+            v-if="msg.confirmed" 
+            class="mt-2 | d-flex | align-center | ga-1 | message-addons"
+            style="color: #5200FF"
+          >
+            <v-icon size="16" color="#5200FF">mdi-check</v-icon>
+            <span class="text-caption | font-weight-medium">조항 확정됨</span>
           </div>
         </div>
       </div>
-    </v-container>
+    </div>
+  </v-container>
 
-    <v-sheet color="white" class="border-t px-6 py-4">
-      <v-card 
-        max-width="1024" 
-        class="mx-auto pa-2 d-flex align-center" 
-        flat 
-        rounded="xl" 
-        color="grey-lighten-4"
-      >
-        <v-text-field
-          :model-value="inputValue"
-          @update:model-value="$emit('update:input-value', $event)"
-          @keypress.enter="$emit('send-message')"
-          placeholder="메시지를 입력하세요..."
-          variant="solo" 
-          flat 
-          hide-details 
-          density="comfortable" 
-          bg-color="transparent" 
-          class="flex-grow-1"
-        ></v-text-field>
-        <v-btn
-          @click="$emit('send-message')"
-          color="blue"
-          icon="mdi-send"
-          variant="plain" 
-        ></v-btn>
-      </v-card>
-    </v-sheet>
-  </v-sheet>
+    <v-card 
+      class="d-flex | align-center | chat-input-area" 
+      flat rounded="xl" 
+      color="#FFFFFF"
+    >
+      <v-text-field
+        :model-value="inputValue"
+        @update:model-value="$emit('update:input-value', $event)"
+        @keypress.enter="$emit('send-message')"
+        placeholder="메시지를 입력하세요..."
+        variant="solo" flat hide-details 
+        density="comfortable" 
+        bg-color="transparent" 
+        class="flex-grow-1"
+      ></v-text-field>
+      <v-btn
+        @click="$emit('send-message')"
+        color="#5200FF"
+        density="comfortable"
+        icon="mdi-send"
+        class="mr-2"
+      ></v-btn>
+    </v-card>
 </template>
 
 <script setup>
@@ -123,17 +113,10 @@ defineExpose({
   min-width: 0;
 }
 
+/* --- 공통 스타일 --- */
 .message-bubble {
   max-width: 672px;
-}
-
-/* [추가] 부가 요소(선택지, 확정)가 버블의 최대 너비를 넘지 않도록 설정 */
-.message-addons {
-  max-width: 672px;
-  /* d-flex flex-column과 함께 사용되어 
-    내부의 v-btn 등이 100% 너비를 갖도록 함 
-  */
-  width: 100%; 
+  height: auto !important;
 }
 
 .message-text {
@@ -142,7 +125,34 @@ defineExpose({
   line-height: 1.6;
 }
 
+.message-addons {
+  max-width: 672px;
+  width: 100%; 
+}
+
 .messages-container {
   scroll-behavior: smooth;
+}
+
+.chat-input-area {
+  padding: 8px;
+  margin: 24px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* --- 유형별 버블 스타일 --- */
+
+:deep(.ai-bubble) {
+  background-color: #FFFFFF !important;
+}
+:deep(.ai-bubble .v-chip__content) {
+  color: black !important;
+}
+
+:deep(.user-bubble) {
+  background-color: #5200FF !important;
+}
+:deep(.user-bubble .v-chip__content) {
+  color: white !important;
 }
 </style>
