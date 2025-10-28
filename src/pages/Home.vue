@@ -56,14 +56,19 @@ const scenarios = ref([
       { id: 2, type: 'user', label: 'User 명확한 응답', subtitle: '11/1 ~ 11/14', color: 'green' },
       { id: 3, type: 'ai', label: 'AI 변환 및 확인', subtitle: '맞으신가요?', color: 'purple' },
       { id: 4, type: 'user', label: 'User 수락', subtitle: '네, 맞아요', color: 'green' },
-      { id: 5, type: 'end', label: '조항 확정', subtitle: '완료', color: 'teal-darken-2' }
+      { id: 5, type: 'end', label: '조항 확정', subtitle: '완료', color: 'teal-darken-2' },
+      // [수정] 다음 질문을 위한 스텝 추가
+      { id: 6, type: 'start', label: 'AI 조항 질문', subtitle: '대금은?', color: 'blue' }
     ],
     messages: [
       { role: 'ai', content: '안녕하세요, DoQ입니다. 계약서 초안 작성을 시작하겠습니다. 먼저, 용역(작업) 기간은 언제인가요?', stepId: 1 },
       { role: 'user', content: '11월 1일부터 11월 14일까지요.', stepId: 2 },
       { role: 'ai', content: '네. 제3조 (용역 기간) 항목에 "2024년 11월 1일부터 2024년 11월 14일까지 (총 14일)"로 명시합니다. 이 내용이 맞으신가요?', needsConfirm: true, stepId: 3 },
       { role: 'user', content: '네, 맞아요.', stepId: 4 },
-      { role: 'ai', content: '좋습니다. \'용역 기간\' 조항이 확정되었습니다. 다음으로, 계약 \'대금\'은 얼마로 정하셨나요?', confirmed: true, stepId: 5 }
+      // [수정] 5번 메시지를 '확정' 내용으로 분리
+      { role: 'ai', content: '좋습니다. \'용역 기간\' 조항이 확정되었습니다.', confirmed: true, stepId: 5 },
+      // [수정] 6번 메시지로 '다음 질문' 추가
+      { role: 'ai', content: '다음으로, 계약 \'대금\'은 얼마로 정하셨나요?', stepId: 6 }
     ],
     contractUpdate: { period: '2024년 11월 1일부터 2024년 11월 14일까지 (총 14일)' }
   },
@@ -77,7 +82,9 @@ const scenarios = ref([
       { id: 2, type: 'user', label: 'User 모호한 응답', subtitle: '2주 정도...', color: 'yellow-darken-2' },
       { id: 3, type: 'ai', label: 'AI 다지선다 제공', subtitle: '옵션 선택', color: 'purple' },
       { id: 4, type: 'user', label: 'User 옵션 선택', subtitle: '2번 선택', color: 'green' },
-      { id: 5, type: 'end', label: '조항 확정', subtitle: '완료', color: 'teal-darken-2' }
+      { id: 5, type: 'end', label: '조항 확정', subtitle: '완료', color: 'teal-darken-2' },
+      // [수정] 다음 질문을 위한 스텝 추가
+      { id: 6, type: 'start', label: 'AI 조항 질문', subtitle: '대금은?', color: 'blue' }
     ],
     messages: [
       { role: 'ai', content: '안녕하세요, DoQ입니다. 계약서 초안 작성을 시작하겠습니다. 먼저, 용역(작업) 기간은 언제인가요?', stepId: 1 },
@@ -93,7 +100,10 @@ const scenarios = ref([
         stepId: 3
       },
       { role: 'user', content: '2번으로 할게요.', stepId: 4 },
-      { role: 'ai', content: '알겠습니다. 제3조 (용역 기간) 항목에 "작업 착수일(YYYY년 MM월 DD일)로부터 14일"로 명시합니다. 조항이 확정되었습니다. 다음으로, 계약 \'대금\'은 얼마로 정하셨나요?', confirmed: true, stepId: 5 }
+      // [수정] 5번 메시지를 '확정' 내용으로 분리
+      { role: 'ai', content: '알겠습니다. 제3조 (용역 기간) 항목에 "작업 착수일(YYYY년 MM월 DD일)로부터 14일"로 명시합니다. 조항이 확정되었습니다.', confirmed: true, stepId: 5 },
+      // [수정] 6번 메시지로 '다음 질문' 추가
+      { role: 'ai', content: '다음으로, 계약 \'대금\'은 얼마로 정하셨나요?', stepId: 6 }
     ],
     contractUpdate: { period: '작업 착수일(YYYY년 MM월 DD일)로부터 14일' }
   },
@@ -108,7 +118,9 @@ const scenarios = ref([
       { id: 3, type: 'ai', label: 'AI 용어 설명', subtitle: '개념 안내', color: 'pink' },
       { id: 4, type: 'ai', label: 'AI 질문 재제시', subtitle: '다시 질문', color: 'purple' },
       { id: 5, type: 'user', label: 'User 옵션 선택', subtitle: '1번 선택', color: 'green' },
-      { id: 6, type: 'end', label: '조항 확정', subtitle: '완료', color: 'teal-darken-2' }
+      { id: 6, type: 'end', label: '조항 확정', subtitle: '완료', color: 'teal-darken-2' },
+      // [수정] 다음 질문을 위한 스텝 추가
+      { id: 7, type: 'start', label: 'AI 조항 질문', subtitle: '다음으로...', color: 'blue' }
     ],
     messages: [
       { role: 'ai', content: '이어서 지식재산권(저작권) 귀속 조항을 정하겠습니다. 작업하신 산출물의 저작권은 누가 가지게 되나요?', stepId: 1 },
@@ -125,13 +137,16 @@ const scenarios = ref([
         stepId: 4
       },
       { role: 'user', content: '아, 이해했어요. 1번, 의뢰인이 갖는 걸로 해주세요.', stepId: 5 },
-      { role: 'ai', content: '네. "모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속된다"로 명시합니다. 조항이 확정되었습니다. 다음으로...', confirmed: true, stepId: 6 }
+      // [수정] 6번 메시지를 '확정' 내용으로 분리
+      { role: 'ai', content: '네. "모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속된다"로 명시합니다. 조항이 확정되었습니다.', confirmed: true, stepId: 6 },
+      // [수정] 7번 메시지로 '다음 질문' 추가
+      { role: 'ai', content: '다음으로...', stepId: 7 }
     ],
     contractUpdate: { copyright: '모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속됨' }
   }
 ]);
 
-
+// (이하 나머지 <script setup> 내용은 동일)
 // ----- 라이프 사이클 ----- //
 onMounted(() => {
   emit('hide-appbar');
