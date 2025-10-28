@@ -1,31 +1,37 @@
 <template>
   <v-container fluid class="pa-0 fill-height">
-    <div class="d-flex fill-height bg-grey-lighten-4">
+    <v-row class="no-gutters fill-height">
       <!-- 워크플로우 사이드바 -->
-      <WorkflowSidebar
-        :scenarios="scenarios"
-        :current-scenario="currentScenario"
-        :selected-step="selectedStep"
-        @select-scenario="loadScenario"
-        @select-step="handleStepClick"
-      />
+      <v-col cols="2" class="bg-grey-lighten-4">
+        <WorkflowSidebar
+          :scenarios="scenarios"
+          :current-scenario="currentScenario"
+          :selected-step="selectedStep"
+          @select-scenario="loadScenario"
+          @select-step="handleStepClick"
+        />
+      </v-col>
 
       <!-- 채팅 영역 -->
-      <ChatArea
-        ref="chatAreaRef"
-        :messages="messages"
-        :input-value="inputValue"
-        :current-scenario="scenarios[currentScenario]"
-        @update:input-value="inputValue = $event"
-        @send-message="handleSend"
-        @select-option="handleOptionClick"
-      />
+      <v-col cols="5">
+        <ChatArea
+          ref="chatAreaRef"
+          :messages="messages"
+          :input-value="inputValue"
+          :current-scenario="scenarios[currentScenario]"
+          @update:input-value="inputValue = $event"
+          @send-message="handleSend"
+          @select-option="handleOptionClick"
+        />
+      </v-col>
 
       <!-- 계약서 미리보기 -->
-      <ContractPreview
-        :contract-data="contractData"
-      />
-    </div>
+      <v-col cols="3" class="bg-grey-lighten-3">
+        <ContractPreview
+          :contract-data="contractData"
+        />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -147,10 +153,10 @@ onUnmounted(() => {
 
 // ----- 함수 정의 ----- //
 const loadScenario = (index) => {
-  messages.value = [...scenarios.value[index].messages];
+  messages.value = scenarios.value[index].messages.filter(msg => msg.stepId === 1);
   contractData.value = { ...contractData.value, ...scenarios.value[index].contractUpdate };
   currentScenario.value = index;
-  selectedStep.value = null;
+  selectedStep.value = 1;
 };
 
 const handleStepClick = (stepId) => {
