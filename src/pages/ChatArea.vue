@@ -11,10 +11,6 @@
           <p class="text-caption text-grey-darken-1">용역계약서 작성 도우미</p>
         </div>
       </div>
-      <div class="text-body-2">
-        <span class="font-weight-medium text-grey-darken-3">{{ currentScenario?.name }}</span>
-        <span class="text-grey ml-2">• {{ currentScenario?.title }}</span>
-      </div>
     </div>
 
     <!-- 메시지 영역 -->
