@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid :class="['pa-0', 'fill-height']">
-    <v-row :class="['no-gutters', 'fill-height']">
+  <v-container fluid class="pa-0 | fill-height">
+    <v-row no-gutters class="fill-height">
       
       <WorkflowSidebar
         :scenarios="scenarios"
@@ -12,28 +12,43 @@
 
       <v-sheet
         width="54"
-        class="d-flex flex-column align-center ga-3 pa-2"
+        class="d-flex | flex-column | align-center | ga-3 | pa-2"
         color="white"
+        :style="{
+          'border-top-right-radius': '24px',
+          'border-bottom-right-radius': '24px'
+        }"
       >
-        <v-btn icon variant="plain" color="#51A1FF">
-          <v-icon size="32">mdi-chat-processing-outline</v-icon>
-          <v-tooltip activator="parent" location="end">새 채팅</v-tooltip>
-        </v-btn>
-        <v-btn icon variant="plain" color="#51A1FF">
-          <v-icon size="32">mdi-history</v-icon>
-          <v-tooltip activator="parent" location="end">이력</v-tooltip>
-        </v-btn>
+        <v-icon class="mt-6 | mb-12">
+          <v-img
+            src="@/assets/logo.svg"
+            width="30" height="30"
+          ></v-img>
+        </v-icon>
+
+        <v-btn
+          icon="mdi-magnify"
+          density="comfortable"
+          variant="tonal"
+          color="#51A1FF"
+        ></v-btn>
         
         <v-spacer></v-spacer>
 
-        <v-btn icon variant="plain" color="#51A1FF">
-          <v-icon size="32">mdi-help-circle-outline</v-icon>
-          <v-tooltip activator="parent" location="end">도움말</v-tooltip>
-        </v-btn>
-        <v-btn icon variant="plain" color="#51A1FF">
-          <v-icon size="32">mdi-cog-outline</v-icon>
-          <v-tooltip activator="parent" location="end">설정</v-tooltip>
-        </v-btn>
+        <v-btn
+          icon="mdi-cog-outline"
+          density="comfortable"
+          variant="tonal"
+          color="#51A1FF"
+        ></v-btn>
+        
+        <v-btn
+          class="mt-6 | mb-6"
+          icon="mdi-account-circle-outline"
+          density="comfortable"
+          variant="tonal"
+          color="#51A1FF"
+        ></v-btn>
       </v-sheet>
 
       <ChatArea
@@ -85,7 +100,6 @@ const scenarios = ref([
       { id: 3, type: 'ai', label: 'AI 변환 및 확인', subtitle: '맞으신가요?', color: 'purple' },
       { id: 4, type: 'user', label: 'User 수락', subtitle: '네, 맞아요', color: 'green' },
       { id: 5, type: 'end', label: '조항 확정', subtitle: '완료', color: 'teal-darken-2' },
-      // [수정] 다음 질문을 위한 스텝 추가
       { id: 6, type: 'start', label: 'AI 조항 질문', subtitle: '대금은?', color: 'blue' }
     ],
     messages: [
@@ -93,9 +107,7 @@ const scenarios = ref([
       { role: 'user', content: '11월 1일부터 11월 14일까지요.', stepId: 2 },
       { role: 'ai', content: '네. 제3조 (용역 기간) 항목에 "2024년 11월 1일부터 2024년 11월 14일까지 (총 14일)"로 명시합니다. 이 내용이 맞으신가요?', needsConfirm: true, stepId: 3 },
       { role: 'user', content: '네, 맞아요.', stepId: 4 },
-      // [수정] 5번 메시지를 '확정' 내용으로 분리
       { role: 'ai', content: '좋습니다. \'용역 기간\' 조항이 확정되었습니다.', confirmed: true, stepId: 5 },
-      // [수정] 6번 메시지로 '다음 질문' 추가
       { role: 'ai', content: '다음으로, 계약 \'대금\'은 얼마로 정하셨나요?', stepId: 6 }
     ],
     contractUpdate: { period: '2024년 11월 1일부터 2024년 11월 14일까지 (총 14일)' }
@@ -111,7 +123,6 @@ const scenarios = ref([
       { id: 3, type: 'ai', label: 'AI 다지선다 제공', subtitle: '옵션 선택', color: 'purple' },
       { id: 4, type: 'user', label: 'User 옵션 선택', subtitle: '2번 선택', color: 'green' },
       { id: 5, type: 'end', label: '조항 확정', subtitle: '완료', color: 'teal-darken-2' },
-      // [수정] 다음 질문을 위한 스텝 추가
       { id: 6, type: 'start', label: 'AI 조항 질문', subtitle: '대금은?', color: 'blue' }
     ],
     messages: [
@@ -128,9 +139,7 @@ const scenarios = ref([
         stepId: 3
       },
       { role: 'user', content: '2번으로 할게요.', stepId: 4 },
-      // [수정] 5번 메시지를 '확정' 내용으로 분리
       { role: 'ai', content: '알겠습니다. 제3조 (용역 기간) 항목에 "작업 착수일(YYYY년 MM월 DD일)로부터 14일"로 명시합니다. 조항이 확정되었습니다.', confirmed: true, stepId: 5 },
-      // [수정] 6번 메시지로 '다음 질문' 추가
       { role: 'ai', content: '다음으로, 계약 \'대금\'은 얼마로 정하셨나요?', stepId: 6 }
     ],
     contractUpdate: { period: '작업 착수일(YYYY년 MM월 DD일)로부터 14일' }
@@ -147,7 +156,6 @@ const scenarios = ref([
       { id: 4, type: 'ai', label: 'AI 질문 재제시', subtitle: '다시 질문', color: 'purple' },
       { id: 5, type: 'user', label: 'User 옵션 선택', subtitle: '1번 선택', color: 'green' },
       { id: 6, type: 'end', label: '조항 확정', subtitle: '완료', color: 'teal-darken-2' },
-      // [수정] 다음 질문을 위한 스텝 추가
       { id: 7, type: 'start', label: 'AI 조항 질문', subtitle: '다음으로...', color: 'blue' }
     ],
     messages: [
@@ -165,16 +173,13 @@ const scenarios = ref([
         stepId: 4
       },
       { role: 'user', content: '아, 이해했어요. 1번, 의뢰인이 갖는 걸로 해주세요.', stepId: 5 },
-      // [수정] 6번 메시지를 '확정' 내용으로 분리
       { role: 'ai', content: '네. "모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속된다"로 명시합니다. 조항이 확정되었습니다.', confirmed: true, stepId: 6 },
-      // [수정] 7번 메시지로 '다음 질문' 추가
       { role: 'ai', content: '다음으로...', stepId: 7 }
     ],
     contractUpdate: { copyright: '모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속됨' }
   }
 ]);
 
-// (이하 나머지 <script setup> 내용은 동일)
 // ----- 라이프 사이클 ----- //
 onMounted(() => {
   emit('hide-appbar');
