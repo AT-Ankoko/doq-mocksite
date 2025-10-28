@@ -2,35 +2,30 @@
   <v-container fluid class="pa-0 fill-height">
     <v-row class="no-gutters fill-height">
       <!-- 워크플로우 사이드바 -->
-      <v-col cols="2" class="bg-grey-lighten-4">
-        <WorkflowSidebar
-          :scenarios="scenarios"
-          :current-scenario="currentScenario"
-          :selected-step="selectedStep"
-          @select-scenario="loadScenario"
-          @select-step="handleStepClick"
-        />
-      </v-col>
+      <WorkflowSidebar
+        :scenarios="scenarios"
+        :current-scenario="currentScenario"
+        :selected-step="selectedStep"
+        @select-scenario="loadScenario"
+        @select-step="handleStepClick"
+      />
 
       <!-- 채팅 영역 -->
-      <v-col cols="5">
-        <ChatArea
-          ref="chatAreaRef"
-          :messages="messages"
-          :input-value="inputValue"
-          :current-scenario="scenarios[currentScenario]"
-          @update:input-value="inputValue = $event"
-          @send-message="handleSend"
-          @select-option="handleOptionClick"
-        />
-      </v-col>
+      <ChatArea
+        ref="chatAreaRef"
+        :messages="messages"
+        :input-value="inputValue"
+        :current-scenario="scenarios[currentScenario]"
+        @update:input-value="inputValue = $event"
+        @send-message="handleSend"
+        @select-option="handleOptionClick"
+      />
+
 
       <!-- 계약서 미리보기 -->
-      <v-col cols="3" class="bg-grey-lighten-3">
-        <ContractPreview
-          :contract-data="contractData"
-        />
-      </v-col>
+      <ContractPreview
+        :contract-data="contractData"
+      />
     </v-row>
   </v-container>
 </template>
