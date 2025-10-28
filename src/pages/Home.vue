@@ -2,70 +2,77 @@
   <v-container fluid class="pa-0 | fill-height">
     <v-row no-gutters class="fill-height">
       
-      <WorkflowSidebar
-        :scenarios="scenarios"
-        :current-scenario="currentScenario"
-        :selected-step="selectedStep"
-        @select-scenario="loadScenario"
-        @select-step="handleStepClick"
-      />
+      <v-col cols="auto">
+        <WorkflowSidebar
+          :scenarios="scenarios"
+          :current-scenario="currentScenario"
+          :selected-step="selectedStep"
+          @select-scenario="loadScenario"
+          @select-step="handleStepClick"
+          class="fill-height" />
+      </v-col>
 
-      <v-sheet
-        width="54"
-        class="d-flex | flex-column | align-center | ga-3 | pa-2"
-        color="white"
-        :style="{
-          'border-top-right-radius': '24px',
-          'border-bottom-right-radius': '24px'
-        }"
-      >
-        <v-icon class="mt-6 | mb-12">
-          <v-img
-            src="@/assets/logo.svg"
-            width="30" height="30"
-          ></v-img>
-        </v-icon>
+      <v-col cols="auto">
+        <v-sheet
+          width="54"
+          class="d-flex | flex-column | align-center | ga-3 | pa-2 | fill-height" color="white"
+          :style="{
+            'border-top-right-radius': '24px',
+            'border-bottom-right-radius': '24px'
+          }"
+        >
+          <v-icon class="mt-6 | mb-12">
+            <v-img
+              src="@/assets/logo.svg"
+              width="30" height="30"
+            ></v-img>
+          </v-icon>
 
-        <v-btn
-          icon="mdi-magnify"
-          density="comfortable"
-          variant="tonal"
-          color="#51A1FF"
-        ></v-btn>
-        
-        <v-spacer></v-spacer>
+          <v-btn
+            icon="mdi-magnify"
+            density="comfortable"
+            variant="tonal"
+            color="#51A1FF"
+          ></v-btn>
+          
+          <v-spacer></v-spacer>
 
-        <v-btn
-          icon="mdi-cog-outline"
-          density="comfortable"
-          variant="tonal"
-          color="#51A1FF"
-        ></v-btn>
-        
-        <v-btn
-          class="mt-6 | mb-6"
-          icon="mdi-account-circle-outline"
-          density="comfortable"
-          variant="tonal"
-          color="#51A1FF"
-        ></v-btn>
-      </v-sheet>
-
-      <ChatArea
-        ref="chatAreaRef"
-        :messages="messages"
-        :input-value="inputValue"
-        :current-scenario="scenarios[currentScenario]"
-        @update:input-value="inputValue = $event"
-        @send-message="handleSend"
-        @select-option="handleOptionClick"
-        class="flex-grow-1"
-        style="overflow: hidden"
-      />
-
-      <ContractPreview
-        :contract-data="contractData"
-      />
+          <v-btn
+            icon="mdi-cog-outline"
+            density="comfortable"
+            variant="tonal"
+            color="#51A1FF"
+          ></v-btn>
+          
+          <v-btn
+            class="mt-6 | mb-6"
+            icon="mdi-account-circle-outline"
+            density="comfortable"
+            variant="tonal"
+            color="#51A1FF"
+          ></v-btn>
+        </v-sheet>
+      </v-col>
+      
+      <v-col class="d-flex | flex-column" style="overflow-y: hidden;">
+        <ChatArea
+          ref="chatAreaRef"
+          :messages="messages"
+          :input-value="inputValue"
+          :current-scenario="scenarios[currentScenario]"
+          @update:input-value="inputValue = $event"
+          @send-message="handleSend"
+          @select-option="handleOptionClick"
+          class="fill-height" style="overflow-y: auto" 
+        />
+      </v-col>
+      
+      <v-col cols="auto" class="d-flex | flex-column" style="overflow-y: hidden;">
+        <ContractPreview
+          :contract-data="contractData"
+          class="fill-height" style="overflow-y: auto" 
+        />
+      </v-col>
     </v-row>
   </v-container>
 </template>
