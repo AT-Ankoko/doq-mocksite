@@ -1,10 +1,6 @@
 <template>
   <div class="preview-sidebar bg-white border-s d-flex flex-column">
-    <div class="px-6 py-4 border-b">
-      <h2 class="text-h6 font-weight-bold text-grey-darken-4">계약서 미리보기</h2>
-      <p class="text-caption text-grey-darken-1 mt-1">실시간으로 업데이트됩니다</p>
-    </div>
-    
+
     <div class="flex-grow-1 overflow-y-auto px-6 py-6">
       <div class="d-flex flex-column ga-6 text-body-2">
         <div class="text-center pb-4 border-b">
