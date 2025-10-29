@@ -99,7 +99,6 @@ const selectedStep = ref(null);
 const contractData = ref({});
 const chatAreaRef = ref(null);
 
-// [수정] scenarios.steps 내부의 color 속성 모두 제거
 const scenarios = ref([
   // 시나리오 1: 명확한 자연어 제시
   {
@@ -122,7 +121,10 @@ const scenarios = ref([
       { role: 'ai', content: '좋습니다. \'용역 기간\' 조항이 확정되었습니다.', confirmed: true, stepId: 5 },
       { role: 'ai', content: '다음으로, 계약 \'대금\'은 얼마로 정하셨나요?', stepId: 6 }
     ],
-    contractUpdate: { period: '2024년 11월 1일부터 2024년 11월 14일까지 (총 14일)' }
+    // 조항 확정 시점(stepId)과 업데이트할 데이터
+    contractUpdates: [
+      { stepId: 5, data: { period: '2024년 11월 1일부터 2024년 11월 14일까지 (총 14일)' } }
+    ]
   },
   // 시나리오 2: 모호한 응답
   {
@@ -154,7 +156,9 @@ const scenarios = ref([
       { role: 'ai', content: '알겠습니다. 제3조 (용역 기간) 항목에 "작업 착수일(YYYY년 MM월 DD일)로부터 14일"로 명시합니다. 조항이 확정되었습니다.', confirmed: true, stepId: 5 },
       { role: 'ai', content: '다음으로, 계약 \'대금\'은 얼마로 정하셨나요?', stepId: 6 }
     ],
-    contractUpdate: { period: '작업 착수일(YYYY년 MM월 DD일)로부터 14일' }
+    contractUpdates: [
+      { stepId: 5, data: { period: '작업 착수일(YYYY년 MM월 DD일)로부터 14일' } }
+    ]
   },
   // 시나리오 3: 용어 질문
   {
@@ -188,11 +192,11 @@ const scenarios = ref([
       { role: 'ai', content: '네. "모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속된다"로 명시합니다. 조항이 확정되었습니다.', confirmed: true, stepId: 6 },
       { role: 'ai', content: '다음으로...', stepId: 7 }
     ],
-    contractUpdate: { copyright: '모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속됨' }
+    contractUpdates: [
+      { stepId: 6, data: { copyright: '모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속됨' } }
+    ]
   }
 ]);
-
-// (이하 나머지 코드는 동일)
 
 // ----- 라이프 사이클 ----- //
 onMounted(() => {
@@ -204,45 +208,68 @@ onUnmounted(() => {
 
 });
 
-
 // ----- 함수 정의 ----- //
-const loadScenario = (index) => {
+function loadScenario(index) {
   messages.value = scenarios.value[index].messages.filter(msg => msg.stepId === 1);
-  contractData.value = { ...contractData.value, ...scenarios.value[index].contractUpdate };
+  contractData.value = {}; // 시나리오 변경 시 계약 데이터 초기화
   currentScenario.value = index;
   selectedStep.value = 1;
-};
+}
 
-const handleStepClick = (stepId) => {
+function handleStepClick(stepId) {
   selectedStep.value = stepId;
-  const filteredMessages = scenarios.value[currentScenario.value].messages.filter(
+  const scenario = scenarios.value[currentScenario.value];
+  
+  // 선택한 stepId까지의 메시지 필터링
+  const filteredMessages = scenario.messages.filter(
     msg => msg.stepId <= stepId
   );
   messages.value = [...filteredMessages];
-};
+  
+  // 계약 데이터 업데이트 (해당 stepId까지의 모든 업데이트 적용)
+  updateContractData(stepId);
+}
 
-const handleSend = () => {
+function updateContractData(stepId) {
+  const scenario = scenarios.value[currentScenario.value];
+  
+  // 계약 데이터 초기화
+  const newContractData = {};
+  
+  // 현재 stepId까지의 모든 contractUpdates 적용
+  if (scenario.contractUpdates) {
+    scenario.contractUpdates.forEach(update => {
+      if (update.stepId <= stepId) {
+        Object.assign(newContractData, update.data);
+      }
+    });
+  }
+  
+  contractData.value = newContractData;
+}
+
+function handleSend() {
   if (!inputValue.value.trim()) return;
   
   const newMessage = { role: 'user', content: inputValue.value };
   messages.value.push(newMessage);
   inputValue.value = '';
   scrollToBottom();
-};
+}
 
-const handleOptionClick = (option) => {
+function handleOptionClick(option) {
   const newMessage = { role: 'user', content: option };
   messages.value.push(newMessage);
   scrollToBottom();
-};
+}
 
-const scrollToBottom = () => {
+function scrollToBottom() {
   nextTick(() => {
     if (chatAreaRef.value?.messagesContainer) {
       chatAreaRef.value.messagesContainer.scrollTop = chatAreaRef.value.messagesContainer.scrollHeight;
     }
   });
-};
+}
 
 // 메시지 변경 감지
 watch(messages, () => {
