@@ -37,22 +37,20 @@
     </v-row>
 
 
-    <v-row class="px-6 py-6 | ma-0">
-      <v-col cols="12" class="d-flex flex-column | ga-3 | pa-0">
+    <v-row class="px-6 | py-6 | ma-0">
+      <v-col cols="12" class="d-flex | flex-column | ga-3 | pa-0">
         <template v-for="(step, idx) in currentSteps" :key="step.id">
           <v-card
             @click="$emit('select-step', step.id)"
             variant="outlined"
-            border="md"
             :style="{ 
               'border-color': getStepBorderColor(step.type),
               'background-color': selectedStep === step.id ? getStepSelectedBgColor(step.type) : 'white' 
             }"
-            class="pa-4 | cursor-pointer"
-            ripple="false" 
+            class="pa-4 | cursor-pointer | rounded-xl"
           >
             <v-row class="ma-0">
-              <v-col cols="12" class="d-flex align-center | ga-2 | pa-0">
+              <v-col cols="12" class="d-flex | align-center | ga-2 | pa-0">
                 <v-avatar 
                   size="24" 
                   :color="getStepAvatarColor(step.type, selectedStep === step.id)"
@@ -78,8 +76,8 @@
             </v-row>
           </v-card>
           
-          <v-row v-if="idx < currentSteps.length - 1" class="ma-0">
-            <v-col cols="12" class="d-flex justify-center | pa-0">
+          <v-row v-if="idx < currentSteps.length - 1">
+            <v-col cols="12" class="d-flex justify-center | pa-0 | mt-1 | mb-1">
               <v-divider 
                 vertical 
                 thickness="2" 
@@ -88,6 +86,7 @@
               ></v-divider>
             </v-col>
           </v-row>
+          
         </template>
       </v-col>
     </v-row>
@@ -182,7 +181,7 @@ function getStepAvatarColor(type, isSelected) {
 }
 
 .connector-line {
-  opacity: 0.3;
+  opacity: 30%;
 }
 
 .border-e {
