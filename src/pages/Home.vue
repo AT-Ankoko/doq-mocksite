@@ -2,7 +2,10 @@
   <v-container fluid class="pa-0 | fill-height">
     <v-row no-gutters class="fill-height">
       
-      <v-col cols="auto">
+      <v-col cols="auto | synario-border">
+        <v-row no-gutters class="synario-box">
+          시연을 돕기 위한 시나리오 실행기입니다.
+        </v-row>
         <WorkflowSidebar
           :scenarios="scenarios"
           :current-scenario="currentScenario"
@@ -279,5 +282,14 @@ watch(messages, () => {
 </script> 
 
 <style scoped>
-/* 공통 스타일은 각 컴포넌트로 이동 */
+.synario-box {
+  justify-content: center;
+  padding: 12px;
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+.synario-border {
+  border: solid 3px #000000;
+}
 </style>
