@@ -1,9 +1,9 @@
 <template>
-  <div class="preview-sidebar bg-white border-s d-flex flex-column">
+  <div class="preview-sidebar bg-white d-flex flex-column">
 
     <div class="flex-grow-1 overflow-y-auto px-6 py-6">
       <div class="d-flex flex-column ga-6 text-body-2">
-        <div class="text-center pb-4 border-b">
+        <div class="text-center pb-4">
           <h3 class="text-h5 font-weight-bold text-grey-darken-4">용역 계약서</h3>
         </div>
 
@@ -82,17 +82,5 @@ const props = defineProps({
 .preview-sidebar {
   width: 384px;
   min-width: 384px;
-}
-
-.border-s {
-  border-inline-start: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.border-b {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-}
-
-.border-t {
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 </style>
