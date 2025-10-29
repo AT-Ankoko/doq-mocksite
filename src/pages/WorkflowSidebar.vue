@@ -5,32 +5,25 @@
     >
       <v-col cols="12" class="pa-0">
         <v-select
+          variant="outlined" rounded="lg" bg-color="#FFFFFF" base-color="#5661F6" color="#5661F6" item-color="#5661F6" 
           :model-value="currentScenario"
           @update:model-value="$emit('select-scenario', $event)"
           :items="scenarioItems"
           item-title="name"
           item-value="value"
-          variant="outlined"
-          density="comfortable"
-          color="#5661F6"
           hide-details
         ></v-select>
 
         <v-card
           class="mt-3"
-          variant="outlined"
-          border="md"
-          :style="{
-            'background-color': '#858BFF1A',
-            'border-color': '#858BFF'
-          }"
+          variant="flat" rounded="lg" color="#F1F5F9"
         >
           <v-card-text class="pa-4">
             <v-row class="ma-0">
               <v-col 
                 cols="12" 
                 class="pa-0 | text-body-2 | font-weight-bold"
-                style="color: #858BFF;"
+                style="color: #5661F6;"
               >
                 {{ currentScenarioInfo.title }}
               </v-col>
