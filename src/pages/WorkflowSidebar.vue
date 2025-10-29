@@ -22,12 +22,15 @@
             <v-row class="ma-0">
               <v-col 
                 cols="12" 
-                class="pa-0 | text-body-2 | font-weight-bold"
+                class="pa-0 | font-weight-bold"
                 style="color: #5661F6;"
               >
                 {{ currentScenarioInfo.title }}
               </v-col>
-              <v-col cols="12" class="pa-0 | text-caption | text-grey-darken-2">
+              <v-col 
+                cols="12" class="pa-0"
+                style="font-size: 12px; color: #475569;"
+              >
                 {{ currentScenarioInfo.description }}
               </v-col>
             </v-row>
@@ -56,12 +59,13 @@
                   :color="getStepAvatarColor(step.type, selectedStep === step.id)"
                 >
                   <span 
-                    class="text-caption | font-weight-bold"
+                    class="font-weight-bold"
+                    style="font-size: 12px; color: #475569;"
                     :style="{ color: selectedStep === step.id ? 'white' : getStepTextColor(step.type) }"
                   >{{ idx + 1 }}</span>
                 </v-avatar>
                 <span 
-                  class="text-body-2 | font-weight-bold"
+                  class="font-weight-bold"
                   :style="{ color: getStepTextColor(step.type) }"
                 >
                   {{ step.label }}
@@ -69,7 +73,8 @@
               </v-col>
               <v-col 
                 cols="12" 
-                class="text-caption | ml-8 | pa-0 | text-grey-darken-1"
+                class="ml-8 | pa-0"
+                style="font-size: 12px; color: #475569;"
               >
                 {{ step.subtitle }}
               </v-col>
@@ -77,7 +82,7 @@
           </v-card>
           
           <v-row v-if="idx < currentSteps.length - 1">
-            <v-col cols="12" class="d-flex justify-center | pa-0 | mt-1 | mb-1">
+            <v-col cols="12" class="d-flex | justify-center | pa-0 | mt-1 | mb-1">
               <v-divider 
                 vertical 
                 thickness="2" 
