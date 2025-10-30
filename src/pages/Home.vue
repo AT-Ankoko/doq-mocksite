@@ -57,7 +57,7 @@
         </v-sheet>
       </v-col>
       
-      <v-col class="d-flex | flex-column" style="overflow-y: hidden;">
+      <v-col class="d-flex | flex-column" style="overflow-y: hidden; max-height: 1000px;">
         <ChatArea
           ref="chatAreaRef"
           :messages="messages"
@@ -66,7 +66,6 @@
           @update:input-value="inputValue = $event"
           @send-message="handleSend"
           @select-option="handleOptionClick"
-          style="overflow-y: auto" 
         />
       </v-col>
       
@@ -276,6 +275,7 @@ function scrollToBottom() {
 
 // 메시지 변경 감지
 watch(messages, () => {
+  
   scrollToBottom();
 }, { deep: true });
 

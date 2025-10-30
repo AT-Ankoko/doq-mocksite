@@ -1,59 +1,61 @@
 <template>
-  <v-container fluid class="messages-container | flex-grow-1 | overflow-y-auto | pa-6" ref="messagesContainer">
-    <div class="d-flex | flex-column | ga-4">
+  <v-sheet class="d-flex flex-column fill-height" color="transparent">
+    <v-container fluid class="messages-container | flex-grow-1 | overflow-y-auto | pa-6" ref="messagesContainer">
       
-      <div
-        v-for="(msg, idx) in messages"
-        :key="idx"
-        :class="['d-flex', msg.role === 'user' ? 'justify-end' : 'justify-start']"
-      >
-        <div 
-          :class="[
-            'd-flex', 
-            'flex-column', 
-            msg.role === 'user' ? 'align-end' : 'align-start'
-          ]"
+      <div class="d-flex | flex-column | ga-4">
+        
+        <div
+          v-for="(msg, idx) in messages"
+          :key="idx"
+          :class="['d-flex', msg.role === 'user' ? 'justify-end' : 'justify-start']"
         >
-          <v-chip
-            :class="[
-              'message-bubble',
-              'message-text',
-              'pa-4',
-              'rounded-xl',
-              msg.role === 'user' ? 'user-bubble' : 'ai-bubble'
-            ]"
-            rounded="lg"
-            color="#FFFFFF"
-          >
-            {{ msg.content }}
-          </v-chip>
-          
-          <div v-if="msg.options" class="mt-3 | d-flex | flex-column | ga-2 | message-addons">
-            <v-btn
-              v-for="(option, optIdx) in msg.options"
-              :key="optIdx"
-              @click="$emit('select-option', option)"
-              variant="outlined"
-              color="#5200FF"
-              class="text-left | justify-start | text-body-2"
-              height="auto"
-            >
-              {{ optIdx + 1 }}. {{ option }}
-            </v-btn>
-          </div>
-          
           <div 
-            v-if="msg.confirmed" 
-            class="mt-2 | d-flex | align-center | ga-1 | message-addons"
-            style="color: #5200FF"
+            :class="[
+              'd-flex', 
+              'flex-column', 
+              msg.role === 'user' ? 'align-end' : 'align-start'
+            ]"
           >
-            <v-icon size="16" color="#5200FF">mdi-check</v-icon>
-            <span class="text-caption | font-weight-medium">조항 확정됨</span>
+            <v-chip
+              :class="[
+                'message-bubble',
+                'message-text',
+                'pa-4',
+                'rounded-xl',
+                msg.role === 'user' ? 'user-bubble' : 'ai-bubble'
+              ]"
+              rounded="lg"
+              color="#FFFFFF"
+            >
+              {{ msg.content }}
+            </v-chip>
+            
+            <div v-if="msg.options" class="mt-3 | d-flex | flex-column | ga-2 | message-addons">
+              <v-btn
+                v-for="(option, optIdx) in msg.options"
+                :key="optIdx"
+                @click="$emit('select-option', option)"
+                variant="outlined"
+                color="#5200FF"
+                class="text-left | justify-start | text-body-2"
+                height="auto"
+              >
+                {{ optIdx + 1 }}. {{ option }}
+              </v-btn>
+            </div>
+            
+            <div 
+              v-if="msg.confirmed" 
+              class="mt-2 | d-flex | align-center | ga-1 | message-addons"
+              style="color: #5200FF"
+            >
+              <v-icon size="16" color="#5200FF">mdi-check</v-icon>
+              <span class="text-caption | font-weight-medium">조항 확정됨</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </v-container>
+    </v-container>
 
     <v-card 
       class="d-flex | align-center | chat-input-area" 
@@ -78,6 +80,7 @@
         class="mr-2"
       ></v-btn>
     </v-card>
+  </v-sheet>
 </template>
 
 <script setup>

@@ -5,9 +5,9 @@
  */
 
 // https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
+@use 'vuetify/settings' with (
+    $color-pack: false
+);
 
 	
 // 글로벌 스타일에 폰트 적용
