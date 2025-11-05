@@ -178,7 +178,6 @@ function getStepAvatarColor(type, isSelected) {
 .workflow-sidebar {
   width: 320px;
   min-width: 320px;
-  height: 100vh;
 }
 
 .cursor-pointer {
