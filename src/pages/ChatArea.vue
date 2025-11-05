@@ -17,13 +17,13 @@
           <v-chip
             :class="[
               'message-bubble',
-              'pa-4',
               'message-text',
-              'text-body-2',
+              'pa-4',
+              'rounded-xl',
               msg.role === 'user' ? 'user-bubble' : 'ai-bubble'
             ]"
             rounded="lg"
-            label
+            color="#FFFFFF"
           >
             {{ msg.content }}
           </v-chip>
@@ -145,14 +145,16 @@ defineExpose({
 :deep(.ai-bubble) {
   background-color: #FFFFFF !important;
 }
+
 :deep(.ai-bubble .v-chip__content) {
-  color: black !important;
+  color: #1F103B !important;
 }
 
 :deep(.user-bubble) {
-  background-color: #5200FF !important;
+  background-color: #5661F64D !important;
 }
+
 :deep(.user-bubble .v-chip__content) {
-  color: white !important;
+  color: #1F103B !important;
 }
 </style>

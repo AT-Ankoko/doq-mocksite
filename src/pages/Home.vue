@@ -2,7 +2,10 @@
   <v-container fluid class="pa-0 | fill-height">
     <v-row no-gutters class="fill-height">
       
-      <v-col cols="auto">
+      <v-col cols="auto | synario-border">
+        <v-row no-gutters class="synario-box">
+          시연을 돕기 위한 시나리오 실행기입니다.
+        </v-row>
         <WorkflowSidebar
           :scenarios="scenarios"
           :current-scenario="currentScenario"
@@ -99,20 +102,19 @@ const selectedStep = ref(null);
 const contractData = ref({});
 const chatAreaRef = ref(null);
 
-// [수정] scenarios.steps 내부의 color 속성 모두 제거
 const scenarios = ref([
-  // 시나리오 1: 명확한 자연어 제시
+  // 시나리오 1
   {
     name: '시나리오 1',
-    title: '명확한 자연어 제시',
+    title: '#S1 명확한 응답',
     description: '사용자가 구체적인 날짜나 정보를 명확하게 제공',
     steps: [
-      { id: 1, type: 'start', label: 'AI 조항 질문', subtitle: '작업 기간은?' },
-      { id: 2, type: 'user', label: 'User 명확한 응답', subtitle: '11/1 ~ 11/14' },
-      { id: 3, type: 'ai', label: 'AI 변환 및 확인', subtitle: '맞으신가요?' },
-      { id: 4, type: 'user', label: 'User 수락', subtitle: '네, 맞아요' },
-      { id: 5, type: 'end', label: '조항 확정', subtitle: '완료' },
-      { id: 6, type: 'start', label: 'AI 조항 질문', subtitle: '대금은?' }
+      { id: 1, type: 'start', label: 'AI 조항 질문'},
+      { id: 2, type: 'user', label: 'User 응답', subtitle: '명확한 응답' },
+      { id: 3, type: 'ai', label: 'AI 변환 및 확인' },
+      { id: 4, type: 'user', label: 'User 수락' },
+      { id: 5, type: 'end', label: '조항 확정' },
+      { id: 6, type: 'start', label: 'AI 조항 질문' }
     ],
     messages: [
       { role: 'ai', content: '안녕하세요, DoQ입니다. 계약서 초안 작성을 시작하겠습니다. 먼저, 용역(작업) 기간은 언제인가요?', stepId: 1 },
@@ -122,20 +124,23 @@ const scenarios = ref([
       { role: 'ai', content: '좋습니다. \'용역 기간\' 조항이 확정되었습니다.', confirmed: true, stepId: 5 },
       { role: 'ai', content: '다음으로, 계약 \'대금\'은 얼마로 정하셨나요?', stepId: 6 }
     ],
-    contractUpdate: { period: '2024년 11월 1일부터 2024년 11월 14일까지 (총 14일)' }
+    // 조항 확정 시점(stepId)과 업데이트할 데이터
+    contractUpdates: [
+      { stepId: 5, data: { period: '2024년 11월 1일부터 2024년 11월 14일까지 (총 14일)' } }
+    ]
   },
   // 시나리오 2: 모호한 응답
   {
     name: '시나리오 2',
-    title: '모호한 응답',
+    title: '#S2 모호한 응답',
     description: '사용자가 모호한 답변을 하여 명확화 필요',
     steps: [
-      { id: 1, type: 'start', label: 'AI 조항 질문', subtitle: '작업 기간은?' },
-      { id: 2, type: 'user', label: 'User 모호한 응답', subtitle: '2주 정도...' },
+      { id: 1, type: 'start', label: 'AI 조항 질문'},
+      { id: 2, type: 'user', label: 'User 응답', subtitle: '모호한 응답' },
       { id: 3, type: 'ai', label: 'AI 다지선다 제공', subtitle: '옵션 선택' },
       { id: 4, type: 'user', label: 'User 옵션 선택', subtitle: '2번 선택' },
-      { id: 5, type: 'end', label: '조항 확정', subtitle: '완료' },
-      { id: 6, type: 'start', label: 'AI 조항 질문', subtitle: '대금은?' }
+      { id: 5, type: 'end', label: '조항 확정' },
+      { id: 6, type: 'start', label: 'AI 조항 질문'}
     ],
     messages: [
       { role: 'ai', content: '안녕하세요, DoQ입니다. 계약서 초안 작성을 시작하겠습니다. 먼저, 용역(작업) 기간은 언제인가요?', stepId: 1 },
@@ -154,21 +159,23 @@ const scenarios = ref([
       { role: 'ai', content: '알겠습니다. 제3조 (용역 기간) 항목에 "작업 착수일(YYYY년 MM월 DD일)로부터 14일"로 명시합니다. 조항이 확정되었습니다.', confirmed: true, stepId: 5 },
       { role: 'ai', content: '다음으로, 계약 \'대금\'은 얼마로 정하셨나요?', stepId: 6 }
     ],
-    contractUpdate: { period: '작업 착수일(YYYY년 MM월 DD일)로부터 14일' }
+    contractUpdates: [
+      { stepId: 5, data: { period: '작업 착수일(YYYY년 MM월 DD일)로부터 14일' } }
+    ]
   },
   // 시나리오 3: 용어 질문
   {
     name: '시나리오 3',
-    title: '용어 질문',
+    title: '#S3 질문',
     description: '사용자가 용어나 개념에 대해 질문',
     steps: [
-      { id: 1, type: 'start', label: 'AI 조항 질문', subtitle: '저작권은?' },
-      { id: 2, type: 'user', label: 'User 용어 질문', subtitle: '그게 뭐예요?' },
-      { id: 3, type: 'ai', label: 'AI 용어 설명', subtitle: '개념 안내' },
-      { id: 4, type: 'ai', label: 'AI 질문 재제시', subtitle: '다시 질문' },
+      { id: 1, type: 'start', label: 'AI 조항 질문' },
+      { id: 2, type: 'user', label: 'User 응답', subtitle: '키워드 질문' },
+      { id: 3, type: 'ai', label: 'AI 용어 설명' },
+      { id: 4, type: 'ai', label: 'AI 질문 재제시' },
       { id: 5, type: 'user', label: 'User 옵션 선택', subtitle: '1번 선택' },
-      { id: 6, type: 'end', label: '조항 확정', subtitle: '완료' },
-      { id: 7, type: 'start', label: 'AI 조항 질문', subtitle: '다음으로...' }
+      { id: 6, type: 'end', label: '조항 확정' },
+      { id: 7, type: 'start', label: 'AI 조항 질문' }
     ],
     messages: [
       { role: 'ai', content: '이어서 지식재산권(저작권) 귀속 조항을 정하겠습니다. 작업하신 산출물의 저작권은 누가 가지게 되나요?', stepId: 1 },
@@ -188,11 +195,11 @@ const scenarios = ref([
       { role: 'ai', content: '네. "모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속된다"로 명시합니다. 조항이 확정되었습니다.', confirmed: true, stepId: 6 },
       { role: 'ai', content: '다음으로...', stepId: 7 }
     ],
-    contractUpdate: { copyright: '모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속됨' }
+    contractUpdates: [
+      { stepId: 6, data: { copyright: '모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속됨' } }
+    ]
   }
 ]);
-
-// (이하 나머지 코드는 동일)
 
 // ----- 라이프 사이클 ----- //
 onMounted(() => {
@@ -204,45 +211,68 @@ onUnmounted(() => {
 
 });
 
-
 // ----- 함수 정의 ----- //
-const loadScenario = (index) => {
+function loadScenario(index) {
   messages.value = scenarios.value[index].messages.filter(msg => msg.stepId === 1);
-  contractData.value = { ...contractData.value, ...scenarios.value[index].contractUpdate };
+  contractData.value = {}; // 시나리오 변경 시 계약 데이터 초기화
   currentScenario.value = index;
   selectedStep.value = 1;
-};
+}
 
-const handleStepClick = (stepId) => {
+function handleStepClick(stepId) {
   selectedStep.value = stepId;
-  const filteredMessages = scenarios.value[currentScenario.value].messages.filter(
+  const scenario = scenarios.value[currentScenario.value];
+  
+  // 선택한 stepId까지의 메시지 필터링
+  const filteredMessages = scenario.messages.filter(
     msg => msg.stepId <= stepId
   );
   messages.value = [...filteredMessages];
-};
+  
+  // 계약 데이터 업데이트 (해당 stepId까지의 모든 업데이트 적용)
+  updateContractData(stepId);
+}
 
-const handleSend = () => {
+function updateContractData(stepId) {
+  const scenario = scenarios.value[currentScenario.value];
+  
+  // 계약 데이터 초기화
+  const newContractData = {};
+  
+  // 현재 stepId까지의 모든 contractUpdates 적용
+  if (scenario.contractUpdates) {
+    scenario.contractUpdates.forEach(update => {
+      if (update.stepId <= stepId) {
+        Object.assign(newContractData, update.data);
+      }
+    });
+  }
+  
+  contractData.value = newContractData;
+}
+
+function handleSend() {
   if (!inputValue.value.trim()) return;
   
   const newMessage = { role: 'user', content: inputValue.value };
   messages.value.push(newMessage);
   inputValue.value = '';
   scrollToBottom();
-};
+}
 
-const handleOptionClick = (option) => {
+function handleOptionClick(option) {
   const newMessage = { role: 'user', content: option };
   messages.value.push(newMessage);
   scrollToBottom();
-};
+}
 
-const scrollToBottom = () => {
+function scrollToBottom() {
   nextTick(() => {
     if (chatAreaRef.value?.messagesContainer) {
       chatAreaRef.value.messagesContainer.scrollTop = chatAreaRef.value.messagesContainer.scrollHeight;
     }
   });
-};
+}
 
 // 메시지 변경 감지
 watch(messages, () => {
@@ -252,5 +282,14 @@ watch(messages, () => {
 </script> 
 
 <style scoped>
-/* 공통 스타일은 각 컴포넌트로 이동 */
+.synario-box {
+  justify-content: center;
+  padding: 12px;
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+.synario-border {
+  border: solid 3px #000000;
+}
 </style>

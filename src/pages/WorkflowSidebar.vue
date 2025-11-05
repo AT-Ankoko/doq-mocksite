@@ -5,36 +5,32 @@
     >
       <v-col cols="12" class="pa-0">
         <v-select
+          variant="outlined" rounded="lg" bg-color="#FFFFFF" base-color="#5661F6" color="#5661F6" item-color="#5661F6" 
           :model-value="currentScenario"
           @update:model-value="$emit('select-scenario', $event)"
           :items="scenarioItems"
           item-title="name"
           item-value="value"
-          variant="outlined"
-          density="comfortable"
-          color="#5661F6"
           hide-details
         ></v-select>
 
         <v-card
           class="mt-3"
-          variant="outlined"
-          border="md"
-          :style="{
-            'background-color': '#858BFF1A',
-            'border-color': '#858BFF'
-          }"
+          variant="flat" rounded="lg" color="#F1F5F9"
         >
           <v-card-text class="pa-4">
             <v-row class="ma-0">
               <v-col 
                 cols="12" 
-                class="pa-0 | text-body-2 | font-weight-bold"
-                style="color: #858BFF;"
+                class="pa-0 | font-weight-bold"
+                style="color: #5661F6;"
               >
                 {{ currentScenarioInfo.title }}
               </v-col>
-              <v-col cols="12" class="pa-0 | text-caption | text-grey-darken-2">
+              <v-col 
+                cols="12" class="pa-0"
+                style="font-size: 12px; color: #475569;"
+              >
                 {{ currentScenarioInfo.description }}
               </v-col>
             </v-row>
@@ -44,33 +40,32 @@
     </v-row>
 
 
-    <v-row class="px-6 py-6 | ma-0">
-      <v-col cols="12" class="d-flex flex-column | ga-3 | pa-0">
+    <v-row class="px-6 | py-6 | ma-0">
+      <v-col cols="12" class="d-flex | flex-column | ga-3 | pa-0">
         <template v-for="(step, idx) in currentSteps" :key="step.id">
           <v-card
             @click="$emit('select-step', step.id)"
             variant="outlined"
-            border="md"
             :style="{ 
               'border-color': getStepBorderColor(step.type),
               'background-color': selectedStep === step.id ? getStepSelectedBgColor(step.type) : 'white' 
             }"
-            class="pa-4 | cursor-pointer"
-            ripple="false" 
+            class="pa-4 | cursor-pointer | rounded-xl"
           >
             <v-row class="ma-0">
-              <v-col cols="12" class="d-flex align-center | ga-2 | pa-0">
+              <v-col cols="12" class="d-flex | align-center | ga-2 | pa-0">
                 <v-avatar 
                   size="24" 
                   :color="getStepAvatarColor(step.type, selectedStep === step.id)"
                 >
                   <span 
-                    class="text-caption | font-weight-bold"
+                    class="font-weight-bold"
+                    style="font-size: 12px; color: #475569;"
                     :style="{ color: selectedStep === step.id ? 'white' : getStepTextColor(step.type) }"
                   >{{ idx + 1 }}</span>
                 </v-avatar>
                 <span 
-                  class="text-body-2 | font-weight-bold"
+                  class="font-weight-bold"
                   :style="{ color: getStepTextColor(step.type) }"
                 >
                   {{ step.label }}
@@ -78,15 +73,16 @@
               </v-col>
               <v-col 
                 cols="12" 
-                class="text-caption | ml-8 | pa-0 | text-grey-darken-1"
+                class="ml-8 | pa-0"
+                style="font-size: 12px; color: #475569;"
               >
                 {{ step.subtitle }}
               </v-col>
             </v-row>
           </v-card>
           
-          <v-row v-if="idx < currentSteps.length - 1" class="ma-0">
-            <v-col cols="12" class="d-flex justify-center | pa-0">
+          <v-row v-if="idx < currentSteps.length - 1">
+            <v-col cols="12" class="d-flex | justify-center | pa-0 | mt-1 | mb-1">
               <v-divider 
                 vertical 
                 thickness="2" 
@@ -95,6 +91,7 @@
               ></v-divider>
             </v-col>
           </v-row>
+          
         </template>
       </v-col>
     </v-row>
@@ -181,7 +178,6 @@ function getStepAvatarColor(type, isSelected) {
 .workflow-sidebar {
   width: 320px;
   min-width: 320px;
-  height: 100vh;
 }
 
 .cursor-pointer {
@@ -189,7 +185,7 @@ function getStepAvatarColor(type, isSelected) {
 }
 
 .connector-line {
-  opacity: 0.3;
+  opacity: 30%;
 }
 
 .border-e {
