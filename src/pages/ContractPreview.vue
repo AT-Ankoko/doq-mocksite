@@ -1,12 +1,16 @@
 <template>
   <div class="preview-sidebar bg-white d-flex flex-column">
 
+    <!-- Risk Gauge (목업) -->
+    <div class="mb-6">
+      <RiskGauge :contract-data="contractData"></RiskGauge>
+    </div>
+
     <div class="flex-grow-1 overflow-y-auto px-6 py-6">
       <div class="d-flex flex-column ga-6 text-body-2">
         <div class="text-center pb-4">
           <h3 class="text-h5 font-weight-bold text-grey-darken-4">용역 계약서</h3>
         </div>
-
         <div>
           <p class="text-grey-darken-2 text-justify">
             의뢰인(이하 "갑")과 작업자(이하 "을")는 다음과 같이 용역 계약을 체결한다.
@@ -70,12 +74,16 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import RiskGauge from '@/components/RiskGauge.vue';
+
 const props = defineProps({
   contractData: {
     type: Object,
     default: () => ({})
   }
 });
+
 </script>
 
 <style scoped>
@@ -83,4 +91,5 @@ const props = defineProps({
   width: 384px;
   min-width: 384px;
 }
+
 </style>
