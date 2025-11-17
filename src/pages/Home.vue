@@ -112,82 +112,88 @@ const participants = ref([
 const selectedSender = ref(participants.value[0].id);
 
 const scenarios = ref([
-  // 시나리오 1
+  // 시나리오 1: 설득 과정
   {
     name: '시나리오 1',
-    title: '#S1 명확한 응답',
-    description: '사용자가 구체적인 날짜나 정보를 명확하게 제공',
+    title: '#S1 설득의 과정',
+    description: '참가자 A 제시 → 참가자 B 우려 → DoQ 중재 → 합의',
     steps: [
-      { id: 1, type: 'start', label: 'AI 조항 질문'},
-      { id: 2, type: 'user', label: 'User 응답', subtitle: '명확한 응답' },
-      { id: 3, type: 'ai', label: 'AI 변환 및 확인' },
-      { id: 4, type: 'user', label: 'User 수락' },
-      { id: 5, type: 'end', label: '조항 확정' },
-      { id: 6, type: 'start', label: 'AI 조항 질문' }
+      { id: 1, type: 'start', label: 'DoQ 조항 질문'},
+      { id: 2, type: 'user', label: '참가자 A 응답', subtitle: '기간 제시' },
+      { id: 3, type: 'user', label: '참가자 B 질문', subtitle: '우려 제기' },
+      { id: 4, type: 'ai', label: 'DoQ 중재', subtitle: '타당성 검토' },
+      { id: 5, type: 'user', label: '참가자 A 설명', subtitle: '이유 설명' },
+      { id: 6, type: 'ai', label: 'DoQ 제안', subtitle: '수정 안내' },
+      { id: 7, type: 'user', label: '참가자 B 동의', subtitle: '합의' },
+      { id: 8, type: 'end', label: '조항 확정' },
+      { id: 9, type: 'start', label: 'DoQ 다음 질문' }
     ],
     messages: [
-    { role: 'ai', content: '안녕하세요, DoQ입니다. 계약서 초안을 함께 작성하겠습니다. 먼저, 용역(작업) 기간을 알려주시겠어요?', stepId: 1 },
-  { role: 'participantA', content: '11월 1일부터 11월 14일까지로 진행하면 됩니다.', stepId: 2 },
-    { role: 'ai', content: '그럼 제3조(용역 기간)에 "2024년 11월 1일부터 2024년 11월 14일까지 (총 14일)"로 기재하겠습니다. 이 내용으로 확정할까요?', needsConfirm: true, stepId: 3 },
-  { role: 'participantB', content: '네, 저도 동의합니다.', stepId: 4 },
-    { role: 'ai', content: '확인했습니다. 용역 기간 조항을 확정했습니다.', confirmed: true, stepId: 5 },
-    { role: 'ai', content: '다음은 계약 대금 관련입니다. 대금을 어떻게 정하셨나요?', stepId: 6 }
+    { role: 'ai', content: '안녕하세요, DoQ입니다. 계약서 초안을 함께 작성하겠습니다. 먼저, 용역(작업) 기간을 어떻게 정하실 생각이세요?', stepId: 1 },
+  { role: 'participantA', content: '11월 1일부터 11월 14일까지, 총 14일 일정으로 진행하면 될 것 같습니다.', stepId: 2 },
+  { role: 'participantB', content: '잠깐, 11월 1일부터라는 게... 내일부터 바로 시작한다는 뜻인가요? 그건 좀 빠른 것 같은데요.', stepId: 3 },
+    { role: 'ai', content: '좋은 지적입니다. 보통 계약서 체결 후 준비 기간을 두는 것이 일반적입니다. 참가자 A님, 실제 작업 시작은 언제부터 예상하시나요?', stepId: 4 },
+  { role: 'participantA', content: '아, 제가 설명을 잘못 드렸네요. 계약 체결 후 3일의 준비 기간을 거쳐서 11월 4일부터 실제 작업을 시작할 계획입니다.', stepId: 5 },
+    { role: 'ai', content: '감사합니다. 그렇다면 제3조에 "실제 작업 착수일: 2024년 11월 4일, 종료일: 2024년 11월 17일 (총 14일)"로 기재하겠습니다. 이렇게 하면 양측 모두 명확하지 않을까요?', stepId: 6 },
+  { role: 'participantB', content: '네, 그렇게 하면 좋겠습니다. 준비 기간이 있으니까 더 안심이 됩니다.', stepId: 7 },
+    { role: 'ai', content: '감사합니다. 용역 기간 조항을 확정했습니다.', confirmed: true, stepId: 8 },
+    { role: 'ai', content: '다음은 계약 대금입니다. 대금 규모와 지급 방식은 어떻게 정하셨나요?', stepId: 9 }
     ],
-    // 조항 확정 시점(stepId)과 업데이트할 데이터
     contractUpdates: [
-      { stepId: 5, data: { period: '2024년 11월 1일부터 2024년 11월 14일까지 (총 14일)' } }
+      { stepId: 8, data: { period: '실제 작업 착수일: 2024년 11월 4일, 종료일: 2024년 11월 17일 (총 14일)' } }
     ]
   },
-  // 시나리오 2: 모호한 응답
+  // 시나리오 2: 협상 과정
   {
     name: '시나리오 2',
-    title: '#S2 모호한 응답',
-    description: '사용자가 모호한 답변을 하여 명확화 필요',
+    title: '#S2 협상의 흐름',
+    description: '모호한 응답 → 각 참가자 의견 → DoQ 설명 → 옵션 선택 → 확정',
     steps: [
-      { id: 1, type: 'start', label: 'AI 조항 질문'},
-      { id: 2, type: 'user', label: 'User 응답', subtitle: '모호한 응답' },
-      { id: 3, type: 'ai', label: 'AI 다지선다 제공', subtitle: '옵션 선택' },
-      { id: 4, type: 'user', label: 'User 옵션 선택', subtitle: '2번 선택' },
-      { id: 5, type: 'end', label: '조항 확정' },
-      { id: 6, type: 'start', label: 'AI 조항 질문'}
+      { id: 1, type: 'start', label: 'DoQ 조항 질문'},
+      { id: 2, type: 'user', label: '참가자 A 응답', subtitle: '모호한 응답' },
+      { id: 3, type: 'user', label: '참가자 B 의견', subtitle: '우려 표시' },
+      { id: 4, type: 'ai', label: 'DoQ 설명', subtitle: '각 방식 설명' },
+      { id: 5, type: 'user', label: '참가자 A 의견', subtitle: '입장 표현' },
+      { id: 6, type: 'user', label: '참가자 B 제안', subtitle: '절충안 제시' },
+      { id: 7, type: 'ai', label: 'DoQ 조정', subtitle: '결정 안내' },
+      { id: 8, type: 'user', label: '참가자 A 동의', subtitle: '합의' },
+      { id: 9, type: 'end', label: '조항 확정' },
+      { id: 10, type: 'start', label: 'DoQ 다음 질문' }
     ],
     messages: [
-    { role: 'ai', content: '안녕하세요, DoQ입니다. 계약서 초안 작성을 시작하겠습니다. 먼저, 용역(작업) 기간은 언제부터 시작하나요?', stepId: 1 },
-  { role: 'participantA', content: '다음 주 월요일부터 약 2주 정도 소요될 것 같습니다.', stepId: 2 },
-      { 
-        role: 'ai', 
-        content: '"2주"를 어떻게 계산할지 선택해 주세요. 아래 중 하나를 골라주세요.',
-        options: [
-          '계약 체결일(오늘)로부터 14일',
-          '작업 착수일(다음 주 월요일)로부터 14일',
-          '기타 (직접 입력)'
-        ],
-        stepId: 3
-      },
-  { role: 'participantB', content: '2번(작업 착수일부터 14일)으로 할게요.', stepId: 4 },
-      { role: 'ai', content: '알겠습니다. 제3조에 "작업 착수일(YYYY년 MM월 DD일)로부터 14일"로 명시하겠습니다. 해당 조항을 확정합니다.', confirmed: true, stepId: 5 },
-      { role: 'ai', content: '다음으로, 계약 \'대금\'은 얼마로 정하셨나요?', stepId: 6 }
+    { role: 'ai', content: '다음으로, 용역 기간의 계산 기준을 정하겠습니다. 언제부터 계산을 시작하시는 것이 좋을까요?', stepId: 1 },
+  { role: 'participantA', content: '계약이 서명되는 날부터 2주일... 아니면 실제 작업을 시작하는 날부터... 글쎄요, 둘 다 가능할 것 같기도 하고...', stepId: 2 },
+  { role: 'participantB', content: '음, 계약 체결일부터 바로 2주라고 하면, 우리는 준비하는 동안 기간이 줄어드는 것 아닌가요?', stepId: 3 },
+    { role: 'ai', content: '좋은 질문입니다. 두 가지 방식이 있습니다. ① "계약 체결일로부터 14일"은 계약 후 모든 기간을 포함하므로, 준비 시간이 필요하면 위험할 수 있습니다. ② "작업 착수일로부터 14일"은 실제 작업에 필요한 시간만 확보합니다.', stepId: 4 },
+  { role: 'participantA', content: '아, 그렇다면 ②번이 더 안전하겠네요. 혹시 도중에 문제가 생기면 기간이 부족할 수 있으니까요.', stepId: 5 },
+  { role: 'participantB', content: '맞습니다. 그래서 저는 착수일부터 14일 계산하는 것을 제안합니다. 그렇게 하면 양쪽 모두 안심할 수 있을 테니까요.', stepId: 6 },
+    { role: 'ai', content: '완벽한 합의입니다. 제3조에 "작업 착수일(2024년 11월 4일)로부터 14일(11월 17일 종료)"로 확정하겠습니다.', stepId: 7 },
+  { role: 'participantA', content: '네, 그렇게 진행해 주세요.', stepId: 8 },
+    { role: 'ai', content: '기간 관련 조항을 확정했습니다.', confirmed: true, stepId: 9 },
+    { role: 'ai', content: '이제 계약 대금에 대해 이야기해 보겠습니다. 대금 규모와 지급 방식은 어떻게 생각하시나요?', stepId: 10 }
     ],
     contractUpdates: [
-      { stepId: 5, data: { period: '작업 착수일(YYYY년 MM월 DD일)로부터 14일' } }
+      { stepId: 9, data: { period: '작업 착수일(2024년 11월 4일)로부터 14일(11월 17일 종료)' } }
     ]
   },
-  // 시나리오 3: 용어 질문
+  // 시나리오 3: 의견 충돌과 합의
   {
     name: '시나리오 3',
-    title: '#S3 질문',
-    description: '사용자가 용어나 개념에 대해 질문',
+    title: '#S3 의견 충돌 → 합의',
+    description: '저작권 귀속 관련 참가자 의견 충돌 → DoQ 설명 → 이해 → 합의',
     steps: [
-      { id: 1, type: 'start', label: 'AI 조항 질문' },
-      { id: 2, type: 'user', label: 'User 응답', subtitle: '키워드 질문' },
-      { id: 3, type: 'ai', label: 'AI 용어 설명' },
-      { id: 4, type: 'ai', label: 'AI 질문 재제시' },
-      { id: 5, type: 'user', label: 'User 옵션 선택', subtitle: '1번 선택' },
-      { id: 6, type: 'end', label: '조항 확정' },
-      { id: 7, type: 'start', label: 'AI 조항 질문' }
+      { id: 1, type: 'start', label: 'DoQ 조항 질문' },
+      { id: 2, type: 'user', label: '참가자 A 의견', subtitle: '작업자 중심' },
+      { id: 3, type: 'user', label: '참가자 B 반박', subtitle: '의뢰인 중심' },
+      { id: 4, type: 'ai', label: 'DoQ 설명', subtitle: '각 옵션 설명' },
+      { id: 5, type: 'user', label: '참가자 A 재검토', subtitle: '의견 변화' },
+      { id: 6, type: 'ai', label: 'DoQ 중재', subtitle: '합의 지점 찾기' },
+      { id: 7, type: 'user', label: '참가자 B 수락', subtitle: '최종 동의' },
+      { id: 8, type: 'end', label: '조항 확정' },
+      { id: 9, type: 'start', label: 'DoQ 완료 메시지' }
     ],
     messages: [
-    { role: 'ai', content: '이어서 지식재산권(저작권) 관련 조항을 정하겠습니다. 작업물의 저작권은 누구에게 귀속되도록 하시겠어요?', stepId: 1 },
+    { role: 'ai', content: '이제 마지막 조항입니다. 지식재산권(저작권) 관련 항목입니다. 완성된 작업물의 저작권은 어떻게 정하시겠어요?', stepId: 1 },
   { role: 'participantA', content: '"저작권 귀속"이 정확히 무슨 의미인가요?', stepId: 2 },
     { role: 'ai', content: '간단히 말하면, 완성된 산출물을 법적으로 소유하고 사용할 권리를 누가 가지는지 정하는 항목입니다. (예: 의뢰인 또는 작업자)', stepId: 3 },
       { 
@@ -200,12 +206,17 @@ const scenarios = ref([
         ],
         stepId: 4
       },
-  { role: 'participantB', content: '네, 1번(의뢰인)으로 해주세요.', stepId: 5 },
-      { role: 'ai', content: '네. 모든 산출물의 지식재산권은 의뢰인(갑)에게 귀속된다고 명시했습니다. 조항을 확정합니다.', confirmed: true, stepId: 6 },
-      { role: 'ai', content: '다음으로...', stepId: 7 }
+  { role: 'participantA', content: '저는 작업자(우리)가 저작권을 가지는 게 맞다고 생각합니다. 우리가 창작한 결과물이니까요.', stepId: 2 },
+  { role: 'participantB', content: '잠깐, 의뢰인이 대금을 지불하는데 저작권까지 의뢰인이 가져야 하지 않을까요? 그래야 나중에 그 결과물을 자유롭게 쓸 수 있으니까요.', stepId: 3 },
+    { role: 'ai', content: '좋은 논의입니다. 간단히 설명하면: ① 작업자가 저작권을 가지면, 의뢰인이 작업물을 사용할 때 승인이 필요할 수 있습니다. ② 의뢰인이 저작권을 가지면, 대금 지불 후 자유롭게 사용 가능합니다. 보통 의뢰-수탁 계약에서는 ②번이 일반적입니다.', stepId: 4 },
+  { role: 'participantA', content: '아, 그렇군요. 그렇다면 의뢰인이 저작권을 가지는 것도 합리적이네요. 계속 쓸 수 있어야 하니까요.', stepId: 5 },
+    { role: 'ai', content: '좋습니다. 그렇다면 제5조에 "모든 산출물의 지식재산권은 의뢰인(갑)에게 귀속된다. 단, 사용 중 이슈 발생 시 작업자(을)에게 협의 요청이 가능하다"로 명시하겠습니다. 이렇게 하면 어떨까요?', stepId: 6 },
+  { role: 'participantB', content: '네, 아주 좋습니다. 이제 명확해졌어요.', stepId: 7 },
+    { role: 'ai', content: '감사합니다. 지식재산권 관련 조항을 확정했습니다. 모든 주요 항목이 완료되었습니다!', confirmed: true, stepId: 8 },
+    { role: 'ai', content: '계약서 초안이 완성되었습니다. 작성된 모든 내용을 검토해 주시고 필요한 부분이 있으면 말씀해 주세요.', stepId: 9 }
     ],
     contractUpdates: [
-      { stepId: 6, data: { copyright: '모든 산출물의 지식재산권은 \'의뢰인(갑)\'에게 귀속됨' } }
+      { stepId: 8, data: { copyright: '모든 산출물의 지식재산권은 의뢰인(갑)에게 귀속됨. 단, 사용 중 이슈 발생 시 작업자(을)에게 협의 요청 가능' } }
     ]
   }
 ]);
